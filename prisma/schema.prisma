@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ContactSubmissionStatus {
+  NEW
+  REVIEWED
+  RESPONDED
+  ARCHIVED
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model HeroContent {
+  id               String   @id @default("hero")
+  eyebrow          String
+  title            String
+  subtitle         String
+  primaryCtaText   String
+  primaryCtaHref   String
+  secondaryCtaText String
+  secondaryCtaHref String
+  updatedAt        DateTime @updatedAt
+}
+
+model AboutContent {
+  id        String   @id @default("about")
+  heroTitle String
+  story     String
+  mission   String
+  vision    String
+  approach  String
+  updatedAt DateTime @updatedAt
+}
+
+model ContactInfo {
+  id          String   @id @default("contact")
+  officeTitle String
+  address     String
+  phone       String
+  email       String
+  hours       String
+  mapEmbedUrl String?
+  updatedAt   DateTime @updatedAt
+}
+
+model CompanyStat {
+  id        String   @id @default(cuid())
+  value     String
+  label     String
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+}
+
+model Service {
+  id        String   @id @default(cuid())
+  title     String
+  summary   String
+  details   String
+  icon      String
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+}
+
+model Industry {
+  id        String   @id @default(cuid())
+  name      String
+  summary   String
+  examples  String
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+}
+
+model ProcessStep {
+  id        String   @id @default(cuid())
+  number    String
+  title     String
+  summary   String
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+}
+
+model Differentiator {
+  id        String   @id @default(cuid())
+  title     String
+  summary   String
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  quote     String
+  author    String
+  role      String
+  company   String
+  location  String
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+}
+
+model ContactSubmission {
+  id              String                  @id @default(cuid())
+  name            String
+  email           String
+  phone           String?
+  company         String?
+  serviceInterest String?
+  message         String
+  status          ContactSubmissionStatus @default(NEW)
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
+
+  @@index([createdAt])
+  @@index([status])
+}
