@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 440" role="img" aria-label="Team member placeholder">
+  <rect width="640" height="440" fill="#dbeafe"/>
+  <circle cx="320" cy="168" r="72" fill="#2563eb" fill-opacity="0.28"/>
+  <path
+    d="M176 392c8-88 72-136 144-136s136 48 144 136"
+    fill="#2563eb"
+    fill-opacity="0.28"
+  />
+</svg>

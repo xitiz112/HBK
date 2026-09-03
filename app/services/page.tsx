@@ -7,13 +7,9 @@ export default async function ServicesPage() {
   const [services, contact] = await Promise.all([getServices(), getContactInfo()]);
 
   return (
-    <main className="bg-white">
+    <main className="bg-background">
       <SiteHeader />
-      <PageHero
-        eyebrow="Services"
-        title="Independent audit, tax, and advisory support for organizations that need confidence."
-        description="Our service model combines technical rigor with practical business context so management teams, boards, and owners receive recommendations they can actually use."
-      />
+      <PageHero title="Our Services" />
       <ServicesSection services={services} />
       <CTASection />
       <SiteFooter contact={contact} />

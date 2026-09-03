@@ -28,7 +28,7 @@ export default async function AdminLoginPage({
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-200">HBK Admin</p>
           <h1 className="mt-4 text-4xl font-semibold tracking-tight">Manage your website content</h1>
           <p className="mt-5 text-base leading-8 text-slate-300">
-            Sign in to update homepage messaging, services, industries, testimonials, and review contact submissions from one place.
+            Sign in to update homepage messaging, services, industries, client feedback, and review contact submissions from one place.
           </p>
         </section>
         <section className="rounded-[1.75rem] border border-slate-200 bg-slate-50 p-8">
@@ -39,8 +39,10 @@ export default async function AdminLoginPage({
           {status ? (
             <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
               {status === "invalid-request"
-                ? "Your session request could not be verified. Please try again."
-                : "Invalid credentials. Please try again."}
+                ? "Your session request could not be verified. Refresh the page and try again."
+                : status === "invalid"
+                  ? "Enter a valid email and password."
+                  : "Invalid email or password. If you just changed ADMIN_PASSWORD in .env, run npm run db:seed."}
             </div>
           ) : null}
           <form action={loginAdmin} className="mt-8 space-y-5">

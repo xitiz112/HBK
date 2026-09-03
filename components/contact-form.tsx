@@ -4,41 +4,26 @@ import { ds, StatusNotice } from "@/components/design-system";
 
 export function ContactForm({
   status,
-  variant = "default",
+  returnTo = "/contact",
 }: {
   status?: string;
-  variant?: "default" | "reference";
+  returnTo?: string;
 }) {
-  const isReference = variant === "reference";
-
   return (
     <form action={submitContactForm} className={`${ds.card} p-6 sm:p-8`}>
       <div>
-        <p className={ds.eyebrow}>{isReference ? "Get in Touch" : "Request A Consultation"}</p>
+        <p className={ds.eyebrow}>Request A Consultation</p>
         <h3 className="mt-3 text-xl font-bold text-slate-900 sm:text-2xl">
-          {isReference ? "Send us a message" : "Tell us what support you need"}
+          Tell us what support you need
         </h3>
       </div>
-      <input type="hidden" name="returnTo" value={variant === "reference" ? "/" : "/contact"} />
+      <input type="hidden" name="returnTo" value={returnTo} />
       <div className="mt-6">{status ? <StatusNotice status={status} /> : null}</div>
       <div className="mt-5 grid gap-4 sm:grid-cols-2">
-        {variant === "reference" ? (
-          <>
-            <label className="text-sm font-medium text-slate-700">
-              First Name
-              <input required name="firstName" className={ds.input} placeholder="First name" />
-            </label>
-            <label className="text-sm font-medium text-slate-700">
-              Last Name
-              <input required name="lastName" className={ds.input} placeholder="Last name" />
-            </label>
-          </>
-        ) : (
-          <label className="text-sm font-medium text-slate-700 sm:col-span-2">
-            Full name
-            <input required name="name" className={ds.input} placeholder="Your full name" />
-          </label>
-        )}
+        <label className="text-sm font-medium text-slate-700 sm:col-span-2">
+          Full name
+          <input required name="name" className={ds.input} placeholder="Your full name" />
+        </label>
         <label className="text-sm font-medium text-slate-700">
           Email
           <input
@@ -74,21 +59,14 @@ export function ContactForm({
           <textarea
             required
             name="message"
-            rows={isReference ? 5 : 6}
+            rows={6}
             className={ds.input}
-            placeholder={
-              isReference
-                ? "How can we help you?"
-                : "Share your current challenge, timeline, or the type of support you are looking for."
-            }
+            placeholder="Share your current challenge, timeline, or the type of support you are looking for."
           />
         </label>
       </div>
-      <button
-        type="submit"
-        className={`mt-6 ${isReference ? "w-full justify-center" : ""} ${ds.btnPrimary}`}
-      >
-        {isReference ? "Send Message" : "Submit Inquiry"}
+      <button type="submit" className={`mt-6 ${ds.btnPrimary}`}>
+        Submit Inquiry
       </button>
     </form>
   );

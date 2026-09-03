@@ -7,13 +7,9 @@ export default async function IndustriesPage() {
   const [industries, contact] = await Promise.all([getIndustries(), getContactInfo()]);
 
   return (
-    <main className="bg-white">
+    <main className="bg-background">
       <SiteHeader />
-      <PageHero
-        eyebrow="Industries"
-        title="Industry-specific insight that reflects how organizations actually operate."
-        description="We support clients across operationally diverse sectors by adjusting our approach to the control environment, reporting expectations, and compliance realities of each industry."
-      />
+      <PageHero title="Industries worked" />
       <IndustriesSection industries={industries} />
       <CTASection />
       <SiteFooter contact={contact} />

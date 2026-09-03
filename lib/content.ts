@@ -2,6 +2,28 @@ import "server-only";
 
 import { prisma } from "@/lib/prisma";
 
+export type SiteSettingsData = {
+  siteName: string;
+  shortName: string;
+  tagline: string;
+  description: string;
+  logo?: string | null;
+  favicon?: string | null;
+  showSiteName: boolean;
+};
+
+export const defaultSiteSettings: SiteSettingsData = {
+  siteName: "HBK & Associates",
+  shortName: "HBK",
+  tagline:
+    "Independent audit, tax, and accounting services that help organizations build confidence in their reporting and governance.",
+  description:
+    "HBK & Associates is an audit, tax, and accounting firm helping businesses build confidence through clear reporting, stronger controls, and practical financial guidance.",
+  logo: null,
+  favicon: null,
+  showSiteName: true,
+};
+
 export type HeroContentData = {
   eyebrow: string;
   title: string;
@@ -10,6 +32,7 @@ export type HeroContentData = {
   primaryCtaHref: string;
   secondaryCtaText: string;
   secondaryCtaHref: string;
+  image?: string | null;
 };
 
 export type AboutContentData = {
@@ -18,6 +41,7 @@ export type AboutContentData = {
   mission: string;
   vision: string;
   approach: string;
+  image?: string | null;
 };
 
 export type ContactInfoData = {
@@ -27,12 +51,14 @@ export type ContactInfoData = {
   email: string;
   hours: string;
   mapEmbedUrl?: string | null;
+  image?: string | null;
 };
 
 export type CompanyStatData = {
   id?: string;
   value: string;
   label: string;
+  image?: string | null;
 };
 
 export type ServiceData = {
@@ -41,6 +67,7 @@ export type ServiceData = {
   summary: string;
   details: string;
   icon: string;
+  image?: string | null;
 };
 
 export type IndustryData = {
@@ -48,6 +75,7 @@ export type IndustryData = {
   name: string;
   summary: string;
   examples: string;
+  image?: string | null;
 };
 
 export type ProcessStepData = {
@@ -55,12 +83,14 @@ export type ProcessStepData = {
   number: string;
   title: string;
   summary: string;
+  image?: string | null;
 };
 
 export type DifferentiatorData = {
   id?: string;
   title: string;
   summary: string;
+  image?: string | null;
 };
 
 export type TestimonialData = {
@@ -70,13 +100,14 @@ export type TestimonialData = {
   role: string;
   company: string;
   location: string;
+  image?: string | null;
 };
 
 export const defaultHeroContent: HeroContentData = {
-  eyebrow: "Trusted Audit, Tax & Advisory",
+  eyebrow: "Trusted Audit, Tax & Accounting",
   title: "Clarity, compliance, and confidence for growing businesses.",
   subtitle:
-    "HBK & Associates helps organizations strengthen controls, stay compliant, and make informed financial decisions with dependable audit and advisory support.",
+    "Established in 2058 B.S. by Hari Bahadur Karki, HBK & Associates provides auditing, tax consulting, banking-purpose financial reports, and accounting outsourcing from New Baneshwor, Kathmandu.",
   primaryCtaText: "Book a Consultation",
   primaryCtaHref: "/contact",
   secondaryCtaText: "Explore Services",
@@ -84,37 +115,37 @@ export const defaultHeroContent: HeroContentData = {
 };
 
 export const defaultAboutContent: AboutContentData = {
-  heroTitle: "About HBK & Associates",
+  heroTitle: "About us",
   story:
-    "HBK & Associates is a client-focused audit and advisory firm committed to helping businesses navigate regulatory expectations, improve governance, and build lasting financial resilience.",
+    "HBK & Associates was established in 2058 B.S. by Hari Bahadur Karki, a registered auditor. From Durga Marga in Buddhanagar, New Baneshwor, the firm has supported Nepali businesses with practical audit, tax, and accounting services.",
   mission:
-    "To deliver rigorous audit, tax, and advisory services with integrity, independence, and practical business insight.",
+    "To deliver rigorous audit, tax, and accounting services with integrity, independence, and practical business insight.",
   vision:
     "To be the trusted professional partner organizations rely on for transparent reporting, strong controls, and sustainable growth.",
   approach:
-    "We combine technical depth with responsive communication, tailoring every engagement to the client's industry, risk profile, and decision-making needs.",
+    "We work closely with construction, manpower, news portal, advertisement, and software companies, tailoring every engagement to the client's reporting and compliance needs.",
 };
 
 export const defaultContactInfo: ContactInfoData = {
   officeTitle: "Speak with HBK & Associates",
-  address: "Bagbazar, Kathmandu, Nepal",
-  phone: "+977-9800000000",
+  address: "Durga Marga-10, Buddhanagar, New Baneshwor, Kathmandu, Nepal",
+  phone: "9841615703, 9851325931",
   email: "info@hbkassociates.com",
   hours: "Sunday to Friday, 9:00 AM to 6:00 PM",
-  mapEmbedUrl: "https://maps.google.com",
+  mapEmbedUrl: "https://maps.google.com/?q=Durga+Marga-10+Buddhanagar+New+Baneshwor+Kathmandu",
 };
 
 export const defaultCompanyStats: CompanyStatData[] = [
-  { id: "stat-1", value: "12+", label: "Years of professional experience" },
+  { id: "stat-1", value: "25+", label: "Years since establishment (2058 B.S.)" },
   { id: "stat-2", value: "300+", label: "Engagements completed" },
   { id: "stat-3", value: "98%", label: "Client retention rate" },
-  { id: "stat-4", value: "15+", label: "Industries supported" },
+  { id: "stat-4", value: "5+", label: "Industries supported" },
 ];
 
 export const defaultServices: ServiceData[] = [
   {
     id: "service-audit",
-    title: "Audit & Assurance",
+    title: "Auditing",
     summary: "Independent audits that strengthen trust in your financial reporting.",
     details:
       "We perform statutory audits, internal reviews, and assurance engagements with a disciplined methodology focused on risk, controls, and reporting accuracy.",
@@ -122,54 +153,60 @@ export const defaultServices: ServiceData[] = [
   },
   {
     id: "service-tax",
-    title: "Tax Planning & Compliance",
+    title: "Tax consulting",
     summary: "Practical tax support that keeps your business compliant and efficient.",
     details:
       "From periodic filings to tax planning and advisory, we help organizations manage obligations while identifying practical efficiencies.",
     icon: "Receipt",
   },
   {
-    id: "service-advisory",
-    title: "Business Advisory",
-    summary: "Decision-ready financial and operational guidance for management teams.",
+    id: "service-banking-report",
+    title: "Financial report for banking purpose",
+    summary: "Bank-ready financial statements and supporting schedules for loans and credit reviews.",
     details:
-      "Our advisory work covers financial reviews, process improvement, governance support, and strategic recommendations aligned to business goals.",
-    icon: "Briefcase",
+      "We prepare financial reports and supporting documentation required by banks and financial institutions for credit assessment, loan processing, and periodic review.",
+    icon: "FileText",
   },
   {
-    id: "service-risk",
-    title: "Risk & Internal Controls",
-    summary: "Control assessments that reduce exposure and improve confidence.",
+    id: "service-accounting",
+    title: "Accounting outsourcing",
+    summary: "Bookkeeping and accounting support so your records stay accurate and up to date.",
     details:
-      "We evaluate process risks, internal controls, and compliance frameworks so management can act on clear, prioritized recommendations.",
-    icon: "BarChart3",
+      "We handle day-to-day accounting, reconciliations, and month-end close on an outsourced basis, giving management reliable numbers without building a full in-house finance team.",
+    icon: "Calculator",
   },
 ];
 
 export const defaultIndustries: IndustryData[] = [
   {
-    id: "industry-manufacturing",
-    name: "Manufacturing",
-    summary: "Inventory-intensive operations, cost controls, and production reporting.",
-    examples: "Inventory systems, costing processes, procurement controls, compliance reporting.",
+    id: "industry-construction",
+    name: "Construction companies",
+    summary: "Project accounting, costing, and compliance support for contractors and developers.",
+    examples: "Project costing, work-in-progress, tax filings, bank reporting.",
   },
   {
-    id: "industry-hospitality",
-    name: "Hospitality",
-    summary: "Financial oversight for hotels, restaurants, and travel-focused businesses.",
-    examples: "Revenue controls, cash handling, payroll review, operational risk assessments.",
+    id: "industry-manpower",
+    name: "Manpower companies",
+    summary: "Payroll, statutory compliance, and financial reporting for staffing and recruitment firms.",
+    examples: "Payroll controls, labour-related filings, management accounts, audit support.",
   },
   {
-    id: "industry-healthcare",
-    name: "Healthcare",
-    summary: "Reliable reporting and process assurance for service-driven organizations.",
-    examples: "Billing reviews, policy compliance, internal controls, management reporting.",
+    id: "industry-newsportal",
+    name: "News portal",
+    summary: "Accounting and tax support for media and digital news businesses.",
+    examples: "Revenue tracking, advertising income, expense controls, statutory audit.",
   },
   {
-    id: "industry-nonprofit",
-    name: "NGOs & Nonprofits",
-    summary: "Transparent reporting and donor-accountability support.",
-    examples: "Grant reporting, fund tracking, internal controls, governance reviews.",
+    id: "industry-advertisement",
+    name: "Advertisement agencies",
+    summary: "Financial reporting and tax consulting for advertising and communications agencies.",
+    examples: "Client billing, campaign costing, VAT/TDS, year-end reporting.",
+  },
+  {
+    id: "industry-software",
+    name: "Software companies",
+    summary: "Audit, tax, and accounting outsourcing for software and technology firms.",
+    examples: "Recurring revenue, payroll, tax consulting, banking-purpose reports.",
   },
 ];
 
@@ -259,6 +296,13 @@ async function safeQuery<T>(query: () => Promise<T>, fallback: T): Promise<T> {
   } catch {
     return fallback;
   }
+}
+
+export async function getSiteSettings(): Promise<SiteSettingsData> {
+  return safeQuery(async () => {
+    const row = await prisma.siteSettings.findUnique({ where: { id: "site" } });
+    return row ?? defaultSiteSettings;
+  }, defaultSiteSettings);
 }
 
 export async function getHeroContent(): Promise<HeroContentData> {
@@ -367,4 +411,268 @@ export async function getHomePageData() {
     differentiators,
     testimonials,
   };
+}
+
+// ─── Blog ─────────────────────────────────────────────────────────────────────
+
+export type BlogPostData = {
+  id?: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  category: string;
+  coverImage?: string | null;
+  author: string;
+  publishedAt: Date;
+  featured: boolean;
+  published: boolean;
+};
+
+export const defaultBlogPosts: BlogPostData[] = [
+  {
+    id: "post-1",
+    title: "What to Expect from a Statutory Audit in Nepal",
+    slug: "what-to-expect-statutory-audit-nepal",
+    excerpt: "A clear breakdown of the audit process — from engagement letter to final report — so your team knows exactly what's coming.",
+    content: "A statutory audit is more than a compliance checkbox. It is an independent assessment of whether your financial statements present a true and fair view...",
+    category: "Audit",
+    coverImage: "/images/blog-controls.png",
+    author: "HBK & Associates",
+    publishedAt: new Date("2026-01-15"),
+    featured: true,
+    published: true,
+  },
+  {
+    id: "post-2",
+    title: "Five Tax Planning Moves Before the Fiscal Year Ends",
+    slug: "five-tax-planning-moves-fiscal-year-end",
+    excerpt: "Practical steps businesses can take in the final quarter to reduce exposure and close the year in good shape.",
+    content: "Year-end tax planning is not just about minimising liability. It is about ensuring you have the documentation, reconciliations, and processes in place...",
+    category: "Tax",
+    coverImage: "/images/blog-tax.png",
+    author: "HBK & Associates",
+    publishedAt: new Date("2026-02-20"),
+    featured: false,
+    published: true,
+  },
+  {
+    id: "post-3",
+    title: "What Boards Should Expect from Assurance Partners",
+    slug: "what-boards-expect-assurance-partners",
+    excerpt: "The right engagement should provide insight, not just compliance paperwork. Here is how to evaluate the relationship.",
+    content: "An assurance engagement should do more than satisfy a regulatory requirement. It should give management and the board practical insight into risk...",
+    category: "Advisory",
+    coverImage: "/images/blog-analytics.png",
+    author: "HBK & Associates",
+    publishedAt: new Date("2026-03-10"),
+    featured: false,
+    published: true,
+  },
+];
+
+export async function getBlogPosts(options?: { featuredOnly?: boolean; limit?: number }): Promise<BlogPostData[]> {
+  return safeQuery(async () => {
+    const where = {
+      published: true,
+      ...(options?.featuredOnly ? { featured: true } : {}),
+    };
+    const rows = await prisma.blogPost.findMany({
+      where,
+      orderBy: { publishedAt: "desc" },
+      take: options?.limit,
+    });
+    return rows.length ? rows : defaultBlogPosts;
+  }, defaultBlogPosts);
+}
+
+export async function getBlogPostBySlug(slug: string): Promise<BlogPostData | null> {
+  return safeQuery(async () => {
+    return prisma.blogPost.findUnique({ where: { slug } });
+  }, null);
+}
+
+// ─── Team ─────────────────────────────────────────────────────────────────────
+
+export type TeamMemberData = {
+  id?: string;
+  name: string;
+  role: string;
+  bio: string;
+  qualifications: string;
+  avatar?: string | null;
+  email?: string | null;
+  linkedin?: string | null;
+};
+
+export const defaultTeamMembers: TeamMemberData[] = [
+  {
+    id: "team-1",
+    name: "Hari Bahadur Karki",
+    role: "Founder",
+    bio: "Hari Bahadur Karki founded HBK & Associates in 2058 B.S. As a registered auditor, he leads the firm's audit, tax, and accounting work for clients in Kathmandu and beyond.",
+    qualifications: "Registered Auditor",
+    avatar: null,
+    email: null,
+    linkedin: null,
+  },
+  {
+    id: "team-2",
+    name: "Bishnu Phuyal",
+    role: "Director",
+    bio: "Bishnu Phuyal is a director at HBK & Associates, supporting client delivery and the firm's day-to-day professional practice.",
+    qualifications: "Director, HBK & Associates",
+    avatar: null,
+    email: null,
+    linkedin: null,
+  },
+  {
+    id: "team-3",
+    name: "Ganesh Karki",
+    role: "Accountant",
+    bio: "Ganesh Karki is the firm's accountant, supporting bookkeeping, reporting, and accounting outsourcing for HBK clients.",
+    qualifications: "Accountant, HBK & Associates",
+    avatar: null,
+    email: null,
+    linkedin: null,
+  },
+];
+
+export async function getTeamMembers(): Promise<TeamMemberData[]> {
+  return safeQuery(async () => {
+    const rows = await prisma.teamMember.findMany({
+      where: { published: true },
+      orderBy: { order: "asc" },
+    });
+    return rows.length ? rows : defaultTeamMembers;
+  }, defaultTeamMembers);
+}
+
+// ─── FAQ ──────────────────────────────────────────────────────────────────────
+
+export type FAQData = {
+  id?: string;
+  question: string;
+  answer: string;
+  category: string;
+  image?: string | null;
+};
+
+export const defaultFAQs: FAQData[] = [
+  {
+    id: "faq-1",
+    question: "What types of audit engagements does HBK handle?",
+    answer: "We conduct statutory audits, internal audits, compliance audits, and special-purpose assurance engagements for companies, NGOs, and financial institutions across Nepal.",
+    category: "Audit",
+  },
+  {
+    id: "faq-2",
+    question: "How long does a typical statutory audit take?",
+    answer: "Most statutory audits are completed within 3 to 6 weeks from the date fieldwork begins, depending on the size of the entity and the quality of records. We confirm timelines clearly in the engagement letter.",
+    category: "Audit",
+  },
+  {
+    id: "faq-3",
+    question: "Can you assist with tax registration and filing in Nepal?",
+    answer: "Yes. We support PAN/VAT registration, periodic tax return preparation, TDS reconciliation, and annual income tax filings for companies and individuals operating in Nepal.",
+    category: "Tax",
+  },
+  {
+    id: "faq-4",
+    question: "Do you work with NGOs and donor-funded organisations?",
+    answer: "Absolutely. We have significant experience with NGO financial management, donor reporting requirements, and fund utilisation reviews under development sector frameworks.",
+    category: "Advisory",
+  },
+  {
+    id: "faq-5",
+    question: "What is the difference between an internal audit and a statutory audit?",
+    answer: "A statutory audit is an independent examination required by law, focused on whether financial statements give a true and fair view. An internal audit is an advisory function that evaluates controls, processes, and risks to help management improve operations.",
+    category: "Audit",
+  },
+  {
+    id: "faq-6",
+    question: "How do I get started with HBK & Associates?",
+    answer: "Simply use the contact form on our website or call our office directly. We will schedule an initial consultation to understand your needs and provide a clear proposal with scope, timeline, and fees.",
+    category: "General",
+  },
+];
+
+export async function getFAQs(category?: string): Promise<FAQData[]> {
+  return safeQuery(async () => {
+    const rows = await prisma.fAQ.findMany({
+      where: { published: true, ...(category ? { category } : {}) },
+      orderBy: { order: "asc" },
+    });
+    return rows.length ? rows : defaultFAQs;
+  }, defaultFAQs);
+}
+
+// ─── Awards & Certifications ──────────────────────────────────────────────────
+
+export type AwardData = {
+  id?: string;
+  title: string;
+  issuer: string;
+  year: string;
+  description?: string | null;
+  image?: string | null;
+};
+
+export const defaultAwards: AwardData[] = [
+  {
+    id: "award-1",
+    title: "Member Firm",
+    issuer: "Institute of Chartered Accountants of Nepal (ICAN)",
+    year: "2012",
+    description: "Registered audit firm operating under ICAN standards and professional code of ethics.",
+  },
+  {
+    id: "award-2",
+    title: "Registered Auditor",
+    issuer: "Office of the Auditor General, Nepal",
+    year: "2014",
+    description: "Authorised to conduct audits of public entities, development projects, and donor-funded programmes.",
+  },
+  {
+    id: "award-3",
+    title: "VAT & Tax Registered Firm",
+    issuer: "Inland Revenue Department, Nepal",
+    year: "2012",
+    description: "Compliant with all tax registration and reporting obligations under the Nepal tax framework.",
+  },
+];
+
+export async function getAwards(): Promise<AwardData[]> {
+  return safeQuery(async () => {
+    const rows = await prisma.award.findMany({
+      where: { published: true },
+      orderBy: { order: "asc" },
+    });
+    return rows.length ? rows : defaultAwards;
+  }, defaultAwards);
+}
+
+// ─── Social Links ──────────────────────────────────────────────────────────────
+
+export type SocialLinkData = {
+  id?: string;
+  platform: string;
+  url: string;
+  icon: string;
+  image?: string | null;
+};
+
+export const defaultSocialLinks: SocialLinkData[] = [
+  { id: "social-1", platform: "LinkedIn", url: "https://linkedin.com/company/hbk-associates", icon: "Linkedin" },
+  { id: "social-2", platform: "Facebook", url: "https://facebook.com/hbkassociates", icon: "Facebook" },
+];
+
+export async function getSocialLinks(): Promise<SocialLinkData[]> {
+  return safeQuery(async () => {
+    const rows = await prisma.socialLink.findMany({
+      where: { published: true },
+      orderBy: { order: "asc" },
+    });
+    return rows.length ? rows : defaultSocialLinks;
+  }, defaultSocialLinks);
 }

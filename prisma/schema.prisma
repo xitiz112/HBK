@@ -23,6 +23,18 @@ model AdminUser {
   updatedAt    DateTime @updatedAt
 }
 
+model SiteSettings {
+  id            String   @id @default("site")
+  siteName      String
+  shortName     String
+  tagline       String
+  description   String
+  logo          String?
+  favicon       String?
+  showSiteName  Boolean  @default(true)
+  updatedAt     DateTime @updatedAt
+}
+
 model HeroContent {
   id               String   @id @default("hero")
   eyebrow          String
@@ -32,6 +44,7 @@ model HeroContent {
   primaryCtaHref   String
   secondaryCtaText String
   secondaryCtaHref String
+  image            String?
   updatedAt        DateTime @updatedAt
 }
 
@@ -42,6 +55,7 @@ model AboutContent {
   mission   String
   vision    String
   approach  String
+  image     String?
   updatedAt DateTime @updatedAt
 }
 
@@ -53,6 +67,7 @@ model ContactInfo {
   email       String
   hours       String
   mapEmbedUrl String?
+  image       String?
   updatedAt   DateTime @updatedAt
 }
 
@@ -60,6 +75,7 @@ model CompanyStat {
   id        String   @id @default(cuid())
   value     String
   label     String
+  image     String?
   order     Int      @default(0)
   published Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -74,6 +90,7 @@ model Service {
   summary   String
   details   String
   icon      String
+  image     String?
   order     Int      @default(0)
   published Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -87,6 +104,7 @@ model Industry {
   name      String
   summary   String
   examples  String
+  image     String?
   order     Int      @default(0)
   published Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -100,6 +118,7 @@ model ProcessStep {
   number    String
   title     String
   summary   String
+  image     String?
   order     Int      @default(0)
   published Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -112,6 +131,7 @@ model Differentiator {
   id        String   @id @default(cuid())
   title     String
   summary   String
+  image     String?
   order     Int      @default(0)
   published Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -127,6 +147,7 @@ model Testimonial {
   role      String
   company   String
   location  String
+  image     String?
   order     Int      @default(0)
   published Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -149,4 +170,95 @@ model ContactSubmission {
 
   @@index([createdAt])
   @@index([status])
+}
+
+// ─── Blog ────────────────────────────────────────────────────────────────────
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String
+  content     String   @db.Text
+  category    String
+  coverImage  String?
+  author      String
+  publishedAt DateTime @default(now())
+  featured    Boolean  @default(false)
+  published   Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([published, publishedAt])
+}
+
+// ─── Team ────────────────────────────────────────────────────────────────────
+
+model TeamMember {
+  id             String   @id @default(cuid())
+  name           String
+  role           String
+  bio            String
+  qualifications String
+  avatar         String?
+  email          String?
+  linkedin       String?
+  order          Int      @default(0)
+  published      Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([order])
+}
+
+// ─── FAQ ─────────────────────────────────────────────────────────────────────
+
+model FAQ {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  category  String   @default("General")
+  image     String?
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+  @@index([category])
+}
+
+// ─── Awards & Certifications ─────────────────────────────────────────────────
+
+model Award {
+  id          String   @id @default(cuid())
+  title       String
+  issuer      String
+  year        String
+  description String?
+  image       String?
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([order])
+}
+
+// ─── Social Links ─────────────────────────────────────────────────────────────
+
+model SocialLink {
+  id        String   @id @default(cuid())
+  platform  String
+  url       String
+  icon      String   @default("Globe")
+  image     String?
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
 }

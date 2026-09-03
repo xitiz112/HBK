@@ -1,7 +1,7 @@
 import "server-only";
 
-import { randomBytes, timingSafeEqual } from "node:crypto";
-import { cookies } from "next/headers";
+import { timingSafeEqual } from "node:crypto";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { jwtVerify, SignJWT } from "jose";
 
@@ -28,39 +28,17 @@ function getSessionSecret() {
   return new TextEncoder().encode(secret);
 }
 
-export async function createAdminSession(payload: SessionPayload) {
-  const token = await new SignJWT(payload)
+export async function signAdminToken(payload: SessionPayload) {
+  return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setSubject(payload.userId)
     .setIssuer("hbk-associates-admin")
     .setIssuedAt()
     .setExpirationTime("12h")
     .sign(getSessionSecret());
-
-  const cookieStore = await cookies();
-  cookieStore.set(SESSION_COOKIE, token, {
-    httpOnly: true,
-    sameSite: "strict",
-    secure: process.env.NODE_ENV === "production",
-    path: "/admin",
-    maxAge: 60 * 60 * 12,
-  });
 }
 
-export async function clearAdminSession() {
-  const cookieStore = await cookies();
-  cookieStore.delete({ name: SESSION_COOKIE, path: "/admin" });
-  cookieStore.delete({ name: CSRF_COOKIE, path: "/admin" });
-}
-
-export async function getAdminSession(): Promise<SessionPayload | null> {
-  const cookieStore = await cookies();
-  const token = cookieStore.get(SESSION_COOKIE)?.value;
-
-  if (!token) {
-    return null;
-  }
-
+export async function verifyAdminToken(token: string): Promise<SessionPayload | null> {
   try {
     const { payload } = await jwtVerify(token, getSessionSecret(), {
       issuer: "hbk-associates-admin",
@@ -73,6 +51,78 @@ export async function getAdminSession(): Promise<SessionPayload | null> {
   } catch {
     return null;
   }
+}
+
+export async function createAdminSession(payload: SessionPayload) {
+  const token = await signAdminToken(payload);
+  const cookieStore = await cookies();
+
+  cookieStore.set(SESSION_COOKIE, token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 60 * 60 * 12,
+    path: "/",
+  });
+
+  return token;
+}
+
+export async function clearAdminSession() {
+  const cookieStore = await cookies();
+  cookieStore.delete({ name: SESSION_COOKIE, path: "/" });
+  cookieStore.delete({ name: SESSION_COOKIE, path: "/admin" });
+  cookieStore.delete({ name: CSRF_COOKIE, path: "/" });
+  cookieStore.delete({ name: CSRF_COOKIE, path: "/admin" });
+}
+
+function readCookieFromHeader(request: Request, name: string) {
+  const header = request.headers.get("cookie");
+  if (!header) {
+    return null;
+  }
+
+  for (const part of header.split(";")) {
+    const [key, ...rest] = part.trim().split("=");
+    if (key === name) {
+      try {
+        return decodeURIComponent(rest.join("="));
+      } catch {
+        return rest.join("=");
+      }
+    }
+  }
+
+  return null;
+}
+
+export async function getAdminSession(): Promise<SessionPayload | null> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(SESSION_COOKIE)?.value;
+  if (!token) {
+    return null;
+  }
+  return verifyAdminToken(token);
+}
+
+export async function getAdminSessionFromRequest(request: Request) {
+  const header = request.headers.get("authorization");
+  if (header?.startsWith("Bearer ")) {
+    const fromHeader = await verifyAdminToken(header.slice(7).trim());
+    if (fromHeader) {
+      return fromHeader;
+    }
+  }
+
+  const fromRequest = readCookieFromHeader(request, SESSION_COOKIE);
+  if (fromRequest) {
+    const session = await verifyAdminToken(fromRequest);
+    if (session) {
+      return session;
+    }
+  }
+
+  return getAdminSession();
 }
 
 export async function requireAdminSession() {
@@ -88,21 +138,12 @@ export async function requireAdminSession() {
 export async function getOrCreateAdminCsrfToken() {
   const cookieStore = await cookies();
   const existing = cookieStore.get(CSRF_COOKIE)?.value;
-
   if (existing) {
     return existing;
   }
 
-  const token = randomBytes(32).toString("hex");
-  cookieStore.set(CSRF_COOKIE, token, {
-    httpOnly: true,
-    sameSite: "strict",
-    secure: process.env.NODE_ENV === "production",
-    path: "/admin",
-    maxAge: 60 * 60 * 12,
-  });
-
-  return token;
+  const headerStore = await headers();
+  return headerStore.get("x-hbk-admin-csrf") ?? "";
 }
 
 export async function assertAdminCsrfToken(formData: FormData, failureRedirect: string) {

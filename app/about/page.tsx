@@ -26,13 +26,9 @@ export default async function AboutPage() {
   ]);
 
   return (
-    <main className="bg-white">
+    <main className="bg-background">
       <SiteHeader />
-      <PageHero
-        eyebrow="About HBK"
-        title={about.heroTitle}
-        description={about.story}
-      />
+      <PageHero title="About" />
       <AboutPreview about={about} />
       <StatsStrip stats={stats} />
       <WhyChooseUsSection differentiators={differentiators} />

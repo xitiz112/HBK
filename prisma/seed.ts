@@ -16,15 +16,47 @@ async function main() {
     create: { email: adminEmail, name: adminName, passwordHash },
   });
 
+  await prisma.siteSettings.upsert({
+    where: { id: "site" },
+    update: {
+      siteName: "HBK & Associates",
+      shortName: "HBK",
+      tagline:
+        "Independent audit, tax, and accounting services that help organizations build confidence in their reporting and governance.",
+      description:
+        "HBK & Associates is an audit, tax, and accounting firm helping businesses build confidence through clear reporting, stronger controls, and practical financial guidance.",
+      showSiteName: true,
+    },
+    create: {
+      id: "site",
+      siteName: "HBK & Associates",
+      shortName: "HBK",
+      tagline:
+        "Independent audit, tax, and accounting services that help organizations build confidence in their reporting and governance.",
+      description:
+        "HBK & Associates is an audit, tax, and accounting firm helping businesses build confidence through clear reporting, stronger controls, and practical financial guidance.",
+      showSiteName: true,
+    },
+  });
+
   await prisma.heroContent.upsert({
     where: { id: "hero" },
-    update: {},
-    create: {
-      id: "hero",
-      eyebrow: "Trusted Audit, Tax & Advisory",
+    update: {
+      eyebrow: "Trusted Audit, Tax & Accounting",
       title: "Clarity, compliance, and confidence for growing businesses.",
       subtitle:
-        "HBK & Associates helps organizations strengthen controls, stay compliant, and make informed financial decisions with dependable audit and advisory support.",
+        "Established in 2058 B.S. by Hari Bahadur Karki, HBK & Associates provides auditing, tax consulting, banking-purpose financial reports, and accounting outsourcing from New Baneshwor, Kathmandu.",
+      primaryCtaText: "Book a Consultation",
+      primaryCtaHref: "/contact",
+      secondaryCtaText: "Explore Services",
+      secondaryCtaHref: "/services",
+    },
+    create: {
+      id: "hero",
+      eyebrow: "Trusted Audit, Tax & Accounting",
+      title: "Clarity, compliance, and confidence for growing businesses.",
+      subtitle:
+        "Established in 2058 B.S. by Hari Bahadur Karki, HBK & Associates provides auditing, tax consulting, banking-purpose financial reports, and accounting outsourcing from New Baneshwor, Kathmandu.",
       primaryCtaText: "Book a Consultation",
       primaryCtaHref: "/contact",
       secondaryCtaText: "Explore Services",
@@ -34,40 +66,57 @@ async function main() {
 
   await prisma.aboutContent.upsert({
     where: { id: "about" },
-    update: {},
-    create: {
-      id: "about",
-      heroTitle: "About HBK & Associates",
+    update: {
+      heroTitle: "About us",
       story:
-        "HBK & Associates is a client-focused audit and advisory firm committed to helping businesses navigate regulatory expectations, improve governance, and build lasting financial resilience.",
+        "HBK & Associates was established in 2058 B.S. by Hari Bahadur Karki, a registered auditor. From Durga Marga in Buddhanagar, New Baneshwor, the firm has supported Nepali businesses with practical audit, tax, and accounting services.",
       mission:
-        "To deliver rigorous audit, tax, and advisory services with integrity, independence, and practical business insight.",
+        "To deliver rigorous audit, tax, and accounting services with integrity, independence, and practical business insight.",
       vision:
         "To be the trusted professional partner organizations rely on for transparent reporting, strong controls, and sustainable growth.",
       approach:
-        "We combine technical depth with responsive communication, tailoring every engagement to the client’s industry, risk profile, and decision-making needs.",
+        "We work closely with construction, manpower, news portal, advertisement, and software companies, tailoring every engagement to the client's reporting and compliance needs.",
+    },
+    create: {
+      id: "about",
+      heroTitle: "About us",
+      story:
+        "HBK & Associates was established in 2058 B.S. by Hari Bahadur Karki, a registered auditor. From Durga Marga in Buddhanagar, New Baneshwor, the firm has supported Nepali businesses with practical audit, tax, and accounting services.",
+      mission:
+        "To deliver rigorous audit, tax, and accounting services with integrity, independence, and practical business insight.",
+      vision:
+        "To be the trusted professional partner organizations rely on for transparent reporting, strong controls, and sustainable growth.",
+      approach:
+        "We work closely with construction, manpower, news portal, advertisement, and software companies, tailoring every engagement to the client's reporting and compliance needs.",
     },
   });
 
   await prisma.contactInfo.upsert({
     where: { id: "contact" },
-    update: {},
+    update: {
+      officeTitle: "Speak with HBK & Associates",
+      address: "Durga Marga-10, Buddhanagar, New Baneshwor, Kathmandu, Nepal",
+      phone: "9841615703, 9851325931",
+      email: "info@hbkassociates.com",
+      hours: "Sunday to Friday, 9:00 AM to 6:00 PM",
+      mapEmbedUrl: "https://maps.google.com/?q=Durga+Marga-10+Buddhanagar+New+Baneshwor+Kathmandu",
+    },
     create: {
       id: "contact",
       officeTitle: "Speak with HBK & Associates",
-      address: "Bagbazar, Kathmandu, Nepal",
-      phone: "+977-9800000000",
+      address: "Durga Marga-10, Buddhanagar, New Baneshwor, Kathmandu, Nepal",
+      phone: "9841615703, 9851325931",
       email: "info@hbkassociates.com",
       hours: "Sunday to Friday, 9:00 AM to 6:00 PM",
-      mapEmbedUrl: "https://maps.google.com",
+      mapEmbedUrl: "https://maps.google.com/?q=Durga+Marga-10+Buddhanagar+New+Baneshwor+Kathmandu",
     },
   });
 
   const stats = [
-    { value: "12+", label: "Years of professional experience", order: 1 },
+    { value: "25+", label: "Years since establishment (2058 B.S.)", order: 1 },
     { value: "300+", label: "Engagements completed", order: 2 },
     { value: "98%", label: "Client retention rate", order: 3 },
-    { value: "15+", label: "Industries supported", order: 4 },
+    { value: "5+", label: "Industries supported", order: 4 },
   ];
 
   for (const stat of stats) {
@@ -81,7 +130,7 @@ async function main() {
   const services = [
     {
       id: "service-audit",
-      title: "Audit & Assurance",
+      title: "Auditing",
       summary: "Independent audits that strengthen trust in your financial reporting.",
       details:
         "We perform statutory audits, internal reviews, and assurance engagements with a disciplined methodology focused on risk, controls, and reporting accuracy.",
@@ -90,7 +139,7 @@ async function main() {
     },
     {
       id: "service-tax",
-      title: "Tax Planning & Compliance",
+      title: "Tax consulting",
       summary: "Practical tax support that keeps your business compliant and efficient.",
       details:
         "From periodic filings to tax planning and advisory, we help organizations manage obligations while identifying practical efficiencies.",
@@ -98,21 +147,21 @@ async function main() {
       order: 2,
     },
     {
-      id: "service-advisory",
-      title: "Business Advisory",
-      summary: "Decision-ready financial and operational guidance for management teams.",
+      id: "service-banking-report",
+      title: "Financial report for banking purpose",
+      summary: "Bank-ready financial statements and supporting schedules for loans and credit reviews.",
       details:
-        "Our advisory work covers financial reviews, process improvement, governance support, and strategic recommendations aligned to business goals.",
-      icon: "Briefcase",
+        "We prepare financial reports and supporting documentation required by banks and financial institutions for credit assessment, loan processing, and periodic review.",
+      icon: "FileText",
       order: 3,
     },
     {
-      id: "service-risk",
-      title: "Risk & Internal Controls",
-      summary: "Control assessments that reduce exposure and improve confidence.",
+      id: "service-accounting",
+      title: "Accounting outsourcing",
+      summary: "Bookkeeping and accounting support so your records stay accurate and up to date.",
       details:
-        "We evaluate process risks, internal controls, and compliance frameworks so management can act on clear, prioritized recommendations.",
-      icon: "BarChart3",
+        "We handle day-to-day accounting, reconciliations, and month-end close on an outsourced basis, giving management reliable numbers without building a full in-house finance team.",
+      icon: "Calculator",
       order: 4,
     },
   ];
@@ -127,32 +176,39 @@ async function main() {
 
   const industries = [
     {
-      id: "industry-manufacturing",
-      name: "Manufacturing",
-      summary: "Inventory-intensive operations, cost controls, and production reporting.",
-      examples: "Inventory systems, costing processes, procurement controls, compliance reporting.",
+      id: "industry-construction",
+      name: "Construction companies",
+      summary: "Project accounting, costing, and compliance support for contractors and developers.",
+      examples: "Project costing, work-in-progress, tax filings, bank reporting.",
       order: 1,
     },
     {
-      id: "industry-hospitality",
-      name: "Hospitality",
-      summary: "Financial oversight for hotels, restaurants, and travel-focused businesses.",
-      examples: "Revenue controls, cash handling, payroll review, operational risk assessments.",
+      id: "industry-manpower",
+      name: "Manpower companies",
+      summary: "Payroll, statutory compliance, and financial reporting for staffing and recruitment firms.",
+      examples: "Payroll controls, labour-related filings, management accounts, audit support.",
       order: 2,
     },
     {
-      id: "industry-healthcare",
-      name: "Healthcare",
-      summary: "Reliable reporting and process assurance for service-driven organizations.",
-      examples: "Billing reviews, policy compliance, internal controls, management reporting.",
+      id: "industry-newsportal",
+      name: "News portal",
+      summary: "Accounting and tax support for media and digital news businesses.",
+      examples: "Revenue tracking, advertising income, expense controls, statutory audit.",
       order: 3,
     },
     {
-      id: "industry-nonprofit",
-      name: "NGOs & Nonprofits",
-      summary: "Transparent reporting and donor-accountability support.",
-      examples: "Grant reporting, fund tracking, internal controls, governance reviews.",
+      id: "industry-advertisement",
+      name: "Advertisement agencies",
+      summary: "Financial reporting and tax consulting for advertising and communications agencies.",
+      examples: "Client billing, campaign costing, VAT/TDS, year-end reporting.",
       order: 4,
+    },
+    {
+      id: "industry-software",
+      name: "Software companies",
+      summary: "Audit, tax, and accounting outsourcing for software and technology firms.",
+      examples: "Recurring revenue, payroll, tax consulting, banking-purpose reports.",
+      order: 5,
     },
   ];
 
@@ -278,6 +334,247 @@ async function main() {
       create: testimonial,
     });
   }
+
+  // ── Blog Posts ──────────────────────────────────────────────────────────────
+  const blogPosts = [
+    {
+      id: "post-1",
+      title: "What to Expect from a Statutory Audit in Nepal",
+      slug: "what-to-expect-statutory-audit-nepal",
+      excerpt: "A clear breakdown of the audit process — from engagement letter to final report — so your team knows exactly what's coming.",
+      content: `A statutory audit is more than a compliance checkbox. It is an independent assessment of whether your financial statements present a true and fair view of the organisation's financial position.
+
+**Before fieldwork begins**, HBK will issue an engagement letter outlining scope, timelines, responsibilities, and fees. This ensures both parties understand what is expected.
+
+**During fieldwork**, our team reviews supporting documentation, tests internal controls, and reconciles key balances. We communicate early if we identify anything material.
+
+**At the close**, you receive a draft report for management review before the final opinion is issued. Our findings come with practical recommendations — not just observations.
+
+Understanding this process helps your finance team prepare effectively, reducing delays and ensuring a smooth engagement.`,
+      category: "Audit",
+      coverImage: "/images/blog-controls.png",
+      author: "HBK & Associates",
+      publishedAt: new Date("2026-01-15"),
+      featured: true,
+      published: true,
+      order: 1,
+    },
+    {
+      id: "post-2",
+      title: "Five Tax Planning Moves Before the Fiscal Year Ends",
+      slug: "five-tax-planning-moves-fiscal-year-end",
+      excerpt: "Practical steps businesses can take in the final quarter to reduce exposure and close the year in good shape.",
+      content: `Year-end tax planning is not just about minimising liability. It is about ensuring you have the documentation, reconciliations, and processes in place to file accurately and on time.
+
+**1. Reconcile your TDS ledger.** Unreconciled TDS deductions are a common source of notices. Confirm all certificates are collected and matched to your books.
+
+**2. Review your advance tax payments.** If your profitability has changed, your advance tax position may need adjustment to avoid interest charges.
+
+**3. Document related-party transactions.** Transfer pricing documentation requirements continue to expand. Ensure intra-group transactions are properly documented and at arm's length.
+
+**4. Review deferred revenue and accruals.** Timing differences between accounting and tax recognition can create unexpected exposures if not managed proactively.
+
+**5. Speak with your advisor before the year closes.** Reactive tax planning after the year ends is significantly more limited. Early consultation gives you options.`,
+      category: "Tax",
+      coverImage: "/images/blog-tax.png",
+      author: "HBK & Associates",
+      publishedAt: new Date("2026-02-20"),
+      featured: false,
+      published: true,
+      order: 2,
+    },
+    {
+      id: "post-3",
+      title: "What Boards Should Expect from Assurance Partners",
+      slug: "what-boards-expect-assurance-partners",
+      excerpt: "The right engagement should provide insight, not just compliance paperwork. Here is how to evaluate the relationship.",
+      content: `An assurance engagement should do more than satisfy a regulatory requirement. It should give management and the board practical insight into the organisation's risk environment, control effectiveness, and financial reporting quality.
+
+**Boards should expect:**
+
+- Clear communication throughout the engagement, not just at the end
+- Early escalation of significant findings or control weaknesses
+- A management letter that goes beyond the audit opinion
+- Recommendations that are actionable and prioritised
+- Independence that is genuine, not just formal
+
+**Red flags to watch for:**
+
+- Auditors who only communicate at year-end
+- Reports that restate management's own disclosures without independent assessment
+- Findings that are consistently immaterial year after year without explanation
+
+At HBK, we treat the board relationship as a professional partnership. Our objective is to strengthen your governance and reporting — not to simply issue an opinion.`,
+      category: "Advisory",
+      coverImage: "/images/blog-analytics.png",
+      author: "HBK & Associates",
+      publishedAt: new Date("2026-03-10"),
+      featured: false,
+      published: true,
+      order: 3,
+    },
+  ];
+
+  for (const post of blogPosts) {
+    await prisma.blogPost.upsert({
+      where: { id: post.id },
+      update: post,
+      create: post,
+    });
+  }
+
+  // ── Team Members ─────────────────────────────────────────────────────────────
+  const teamMembers = [
+    {
+      id: "team-1",
+      name: "Hari Bahadur Karki",
+      role: "Founder",
+      bio: "Hari Bahadur Karki founded HBK & Associates in 2058 B.S. As a registered auditor, he leads the firm's audit, tax, and accounting work for clients in Kathmandu and beyond.",
+      qualifications: "Registered Auditor",
+      email: null,
+      order: 1,
+    },
+    {
+      id: "team-2",
+      name: "Bishnu Phuyal",
+      role: "Director",
+      bio: "Bishnu Phuyal is a director at HBK & Associates, supporting client delivery and the firm's day-to-day professional practice.",
+      qualifications: "Director, HBK & Associates",
+      email: null,
+      order: 2,
+    },
+    {
+      id: "team-3",
+      name: "Ganesh Karki",
+      role: "Accountant",
+      bio: "Ganesh Karki is the firm's accountant, supporting bookkeeping, reporting, and accounting outsourcing for HBK clients.",
+      qualifications: "Accountant, HBK & Associates",
+      email: null,
+      order: 3,
+    },
+  ];
+
+  for (const member of teamMembers) {
+    await prisma.teamMember.upsert({
+      where: { id: member.id },
+      update: member,
+      create: member,
+    });
+  }
+
+  // ── FAQs ─────────────────────────────────────────────────────────────────────
+  const faqs = [
+    {
+      id: "faq-1",
+      question: "What types of audit engagements does HBK handle?",
+      answer: "We conduct statutory audits, internal audits, compliance audits, and special-purpose assurance engagements for companies, NGOs, and financial institutions across Nepal.",
+      category: "Audit",
+      order: 1,
+    },
+    {
+      id: "faq-2",
+      question: "How long does a typical statutory audit take?",
+      answer: "Most statutory audits are completed within 3 to 6 weeks from the date fieldwork begins, depending on the size of the entity and the quality of records. We confirm timelines clearly in the engagement letter.",
+      category: "Audit",
+      order: 2,
+    },
+    {
+      id: "faq-3",
+      question: "Can you assist with tax registration and filing in Nepal?",
+      answer: "Yes. We support PAN/VAT registration, periodic tax return preparation, TDS reconciliation, and annual income tax filings for companies and individuals operating in Nepal.",
+      category: "Tax",
+      order: 3,
+    },
+    {
+      id: "faq-4",
+      question: "Do you work with NGOs and donor-funded organisations?",
+      answer: "Absolutely. We have significant experience with NGO financial management, donor reporting requirements, and fund utilisation reviews under development sector frameworks.",
+      category: "Advisory",
+      order: 4,
+    },
+    {
+      id: "faq-5",
+      question: "What is the difference between an internal audit and a statutory audit?",
+      answer: "A statutory audit is an independent examination required by law, focused on whether financial statements give a true and fair view. An internal audit is an advisory function that evaluates controls, processes, and risks to help management improve operations.",
+      category: "Audit",
+      order: 5,
+    },
+    {
+      id: "faq-6",
+      question: "How do I get started with HBK & Associates?",
+      answer: "Simply use the contact form on our website or call our office directly. We will schedule an initial consultation to understand your needs and provide a clear proposal with scope, timeline, and fees.",
+      category: "General",
+      order: 6,
+    },
+  ];
+
+  for (const faq of faqs) {
+    await prisma.fAQ.upsert({
+      where: { id: faq.id },
+      update: faq,
+      create: faq,
+    });
+  }
+
+  // ── Awards & Certifications ───────────────────────────────────────────────────
+  const awards = [
+    {
+      id: "award-1",
+      title: "Member Firm",
+      issuer: "Institute of Chartered Accountants of Nepal (ICAN)",
+      year: "2012",
+      description: "Registered audit firm operating under ICAN standards and professional code of ethics.",
+      order: 1,
+    },
+    {
+      id: "award-2",
+      title: "Registered Auditor",
+      issuer: "Office of the Auditor General, Nepal",
+      year: "2014",
+      description: "Authorised to conduct audits of public entities, development projects, and donor-funded programmes.",
+      order: 2,
+    },
+    {
+      id: "award-3",
+      title: "VAT & Tax Registered Firm",
+      issuer: "Inland Revenue Department, Nepal",
+      year: "2012",
+      description: "Compliant with all tax registration and reporting obligations under the Nepal tax framework.",
+      order: 3,
+    },
+  ];
+
+  for (const award of awards) {
+    await prisma.award.upsert({
+      where: { id: award.id },
+      update: award,
+      create: award,
+    });
+  }
+
+  // ── Social Links ──────────────────────────────────────────────────────────────
+  const socialLinks = [
+    { id: "social-1", platform: "LinkedIn", url: "https://linkedin.com/company/hbk-associates", icon: "Linkedin", order: 1 },
+    { id: "social-2", platform: "Facebook", url: "https://facebook.com/hbkassociates", icon: "Facebook", order: 2 },
+  ];
+
+  for (const link of socialLinks) {
+    await prisma.socialLink.upsert({
+      where: { id: link.id },
+      update: link,
+      create: link,
+    });
+  }
+
+  await prisma.service.deleteMany({
+    where: { id: { notIn: services.map((service) => service.id) } },
+  });
+  await prisma.industry.deleteMany({
+    where: { id: { notIn: industries.map((industry) => industry.id) } },
+  });
+  await prisma.teamMember.deleteMany({
+    where: { id: { notIn: teamMembers.map((member) => member.id) } },
+  });
 }
 
 main()

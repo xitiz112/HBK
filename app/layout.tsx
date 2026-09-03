@@ -1,27 +1,56 @@
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
+import { Montserrat, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
 import BackToTop from "@/components/back-to-top";
+import { GoogleTranslate } from "@/components/google-translate";
+import { TranslateLoader } from "@/components/translate-loader";
+import { getSiteSettings } from "@/lib/content";
+import { TRANSLATE_BOOTSTRAP_SCRIPT } from "@/lib/i18n/google-translate";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "HBK & Associates",
-  description:
-    "HBK & Associates is an audit, tax, and advisory firm helping businesses build confidence through clear reporting, stronger controls, and practical financial guidance.",
-};
+const notoDevanagari = Noto_Sans_Devanagari({
+  variable: "--font-devanagari",
+  subsets: ["devanagari", "latin"],
+});
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const hasIcon = Boolean(settings.favicon || settings.logo);
+
+  return {
+    title: settings.siteName,
+    description: settings.description,
+    icons: hasIcon
+      ? {
+          icon: [{ url: "/icon", type: "image/png" }],
+          shortcut: "/icon",
+          apple: "/icon",
+        }
+      : undefined,
+  };
+}
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${montserrat.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={`${montserrat.variable} ${notoDevanagari.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-white font-sans text-slate-900">
-        <div className="pt-[65px]">{children}</div>
+      <head>
+        <script
+          id="hbk-translate-bootstrap"
+          dangerouslySetInnerHTML={{ __html: TRANSLATE_BOOTSTRAP_SCRIPT }}
+        />
+      </head>
+      <body className="min-h-full bg-background font-sans text-slate-900">
+        <TranslateLoader />
+        {children}
+        <GoogleTranslate />
         <BackToTop />
       </body>
     </html>

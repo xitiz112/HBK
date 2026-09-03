@@ -1,21 +1,31 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
   BarChart3,
   Briefcase,
   Building2,
+  Calculator,
   Check,
   Factory,
   FileText,
+  HardHat,
   HeartPulse,
   Landmark,
   Mail,
+  Megaphone,
+  MonitorSmartphone,
+  Newspaper,
   Phone,
   Receipt,
   ShieldCheck,
-  Star,
+  Users,
 } from "lucide-react";
+
+import { ContactForm } from "@/components/contact-form";
+import { ContentImage } from "@/components/content-image";
+import { LocationMap } from "@/components/location-map";
+import { ProcessSteps } from "@/components/process-steps";
+import { TestimonialsCarousel } from "@/components/testimonials-carousel";
 
 import {
   ButtonLink,
@@ -24,11 +34,11 @@ import {
   ds,
   PageHero,
   SectionHeading,
-  SiteFooter,
-  SiteHeader,
   StatsBand,
   StatusNotice,
 } from "@/components/design-system";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header-server";
 import ScrollReveal from "@/components/scroll-reveal";
 import type {
   AboutContentData,
@@ -37,6 +47,7 @@ import type {
   IndustryData,
   ProcessStepData,
   ServiceData,
+  TeamMemberData,
   TestimonialData,
 } from "@/lib/content";
 
@@ -57,40 +68,77 @@ const serviceIcons: Record<string, IconComponent> = {
   Briefcase,
   BarChart3,
   FileText,
+  Calculator,
 };
 
-const industryIcons = [Factory, Building2, HeartPulse, Landmark];
+function getIndustryIcon(industry: Pick<IndustryData, "id" | "name">): IconComponent {
+  const key = `${industry.id ?? ""} ${industry.name}`.toLowerCase();
+  if (/construct|contractor|builder|civil/.test(key)) return HardHat;
+  if (/manpower|staff|recruit|labour|labor|payroll|human/.test(key)) return Users;
+  if (/news|media|portal|press|journal/.test(key)) return Newspaper;
+  if (/advert|marketing|agency|campaign|brand/.test(key)) return Megaphone;
+  if (/software|tech|it\b|digital|saas/.test(key)) return MonitorSmartphone;
+  if (/manufactur|factory|product/.test(key)) return Factory;
+  if (/real estate|property|housing/.test(key)) return Building2;
+  if (/health|hospital|medical/.test(key)) return HeartPulse;
+  if (/bank|financ|insurance/.test(key)) return Landmark;
+  if (/government|npo|ngo|public/.test(key)) return Landmark;
+  return Briefcase;
+}
+
+function MediaThumb({
+  src,
+  alt,
+  circle = false,
+  children,
+}: {
+  src?: string | null;
+  alt: string;
+  circle?: boolean;
+  children: React.ReactNode;
+}) {
+  if (src) {
+    return (
+      <span className={`relative block h-11 w-11 overflow-hidden ${circle ? "rounded-full" : "rounded-lg"}`}>
+        <ContentImage src={src} alt={alt} fill className="object-cover" sizes="44px" curvy={false} />
+      </span>
+    );
+  }
+  return children;
+}
 
 export function AboutPreview({ about }: { about: AboutContentData }) {
   return (
     <section className={ds.section}>
       <Container className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
         <div>
-          <ScrollReveal variant="slide-left">
+          <ScrollReveal variant="slide-left" delay={200}>
             <SectionHeading
               eyebrow="About Us"
               title="The HBK & Associates Story"
               description={about.story}
             />
           </ScrollReveal>
-          <ScrollReveal variant="fade-up" delay={100}>
+          <ScrollReveal variant="fade-up" delay={280}>
             <p className={`mt-4 ${ds.body}`}>{about.mission}</p>
           </ScrollReveal>
-          <ScrollReveal variant="fade-up" delay={200}>
+          <ScrollReveal variant="fade-up" delay={380}>
             <ButtonLink href="/about" className="mt-8">
               Read Our Story
               <ArrowRight className="h-4 w-4" />
             </ButtonLink>
           </ScrollReveal>
         </div>
-        <ScrollReveal variant="slide-right" delay={100}>
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
-            <Image
-              src="/images/about-office.png"
+        <ScrollReveal variant="slide-right" delay={280}>
+          <div className="relative aspect-square w-full max-w-lg [filter:drop-shadow(0_18px_36px_rgba(15,23,42,0.12))] lg:max-w-none">
+            <ContentImage
+              src={about.image}
+              fallback="/images/about-office.png"
               alt="HBK & Associates professional team"
-              width={560}
-              height={420}
-              className="h-auto w-full rounded-xl object-cover"
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover"
+              curvy
             />
           </div>
         </ScrollReveal>
@@ -111,7 +159,7 @@ export function ServicesSection({
   return (
     <section className={ds.sectionMuted}>
       <Container>
-        <ScrollReveal variant="fade-up">
+        <ScrollReveal variant="fade-up" delay={200}>
           <SectionHeading
             align="center"
             eyebrow="Our Services"
@@ -123,7 +171,7 @@ export function ServicesSection({
           {rows.map((service, index) => {
             const Icon = serviceIcons[service.icon] ?? ShieldCheck;
             return (
-              <ScrollReveal key={service.id ?? `${service.title}-${index}`} variant="fade-up" delay={index * 80}>
+              <ScrollReveal key={service.id ?? `${service.title}-${index}`} variant="fade-up" delay={200 + index * 120}>
               <div
                 className="group h-[280px] [perspective:1000px]"
               >
@@ -131,31 +179,30 @@ export function ServicesSection({
                 <div className="relative h-[280px] w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
 
                   {/* Front face */}
-                  <div className="absolute inset-0 flex flex-col rounded-xl border border-slate-200 bg-white p-6 shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)] [backface-visibility:hidden]">
-                    <div className={ds.iconBox}>
-                      <Icon className="h-5 w-5" />
-                    </div>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-white p-6 text-center shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)] [backface-visibility:hidden]">
+                    <MediaThumb src={service.image} alt={service.title}>
+                      <div className={ds.iconBox}>
+                        <Icon className="h-5 w-5" />
+                      </div>
+                    </MediaThumb>
                     <h3 className={`mt-5 ${ds.h3}`}>{service.title}</h3>
                     <p className={`mt-2 ${ds.bodySm}`}>{service.summary}</p>
-                    <span className={`mt-auto pt-4 ${ds.link}`}>
-                      Learn More
-                      <ArrowRight className="h-4 w-4" />
-                    </span>
                   </div>
 
                   {/* Back face */}
-                  <div className="absolute inset-0 flex flex-col rounded-xl bg-[var(--color-primary)] p-6 pb-10 [backface-visibility:hidden] [transform:rotateY(180deg)]">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/20 text-white">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <h3 className="mt-5 text-lg font-bold text-white">{service.title}</h3>
-                    <p className="mt-3 text-sm leading-6 text-blue-100">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center rounded-xl bg-[var(--color-primary)] p-6 pb-10 text-center [backface-visibility:hidden] [transform:rotateY(180deg)]">
+                    <MediaThumb src={service.image} alt={service.title}>
+                      <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/20 text-white">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                    </MediaThumb>
+                    <h3 className="mt-5 text-xl font-bold text-white">{service.title}</h3>
+                    <p className="mt-3 text-[15px] leading-6 text-blue-100">
                       {service.details || service.summary}
                     </p>
-                    {/* Button hangs over the bottom edge */}
                     <Link
                       href="/services"
-                      className="absolute bottom-0 left-6 inline-flex translate-y-1/2 items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-[var(--color-primary)] shadow-[0px_4px_12px_rgba(0,0,0,0.15)] transition hover:bg-blue-50"
+                      className="absolute bottom-0 left-1/2 inline-flex -translate-x-1/2 translate-y-1/2 items-center gap-2 rounded-lg border border-white bg-white px-5 py-2.5 text-base font-semibold text-[var(--color-primary)] shadow-[0px_4px_12px_rgba(0,0,0,0.15)] transition hover:bg-blue-50"
                     >
                       Get Started
                       <ArrowRight className="h-4 w-4" />
@@ -184,7 +231,7 @@ export function IndustriesSection({
     return (
       <section className={ds.sectionBrand}>
         <Container>
-          <ScrollReveal variant="fade-up">
+          <ScrollReveal variant="fade-up" delay={200}>
             <SectionHeading
               align="center"
               eyebrow="Industries"
@@ -194,14 +241,14 @@ export function IndustriesSection({
           </ScrollReveal>
           <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
             {industries.map((industry, index) => {
-              const Icon = industryIcons[index % industryIcons.length];
+              const Icon = getIndustryIcon(industry);
               return (
-                <ScrollReveal key={industry.id ?? industry.name} variant="fade-up" delay={index * 50}>
+                <ScrollReveal key={industry.id ?? industry.name} variant="fade-up" delay={200 + index * 90}>
                   <div className={`flex flex-col items-center ${ds.card} px-3 py-6 text-center`}>
                     <div className={ds.iconCircle}>
                       <Icon className="h-5 w-5" />
                     </div>
-                    <p className="mt-3 text-sm font-semibold text-slate-800">{industry.name}</p>
+                    <p className="mt-3 text-base font-semibold text-slate-800">{industry.name}</p>
                   </div>
                 </ScrollReveal>
               );
@@ -215,7 +262,7 @@ export function IndustriesSection({
   return (
     <section className={ds.section}>
       <Container>
-        <ScrollReveal variant="fade-up">
+        <ScrollReveal variant="fade-up" delay={200}>
           <SectionHeading
             align="center"
             eyebrow="Industries Served"
@@ -225,16 +272,16 @@ export function IndustriesSection({
         </ScrollReveal>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {industries.map((industry, index) => {
-            const Icon = industryIcons[index % industryIcons.length];
+            const Icon = getIndustryIcon(industry);
             return (
-              <ScrollReveal key={industry.id ?? industry.name} variant="fade-up" delay={index * 80}>
+              <ScrollReveal key={industry.id ?? industry.name} variant="fade-up" delay={200 + index * 120}>
                 <div className={`${ds.card} ${ds.cardPadding}`}>
                   <div className={ds.iconBox}>
                     <Icon className="h-5 w-5" />
                   </div>
-                  <h3 className={`mt-5 ${ds.h3}`}>{industry.name}</h3>
+                  <h3 className="mt-5 text-[22px] font-bold text-slate-900">{industry.name}</h3>
                   <p className={`mt-2 ${ds.bodySm}`}>{industry.summary}</p>
-                  <p className="mt-3 text-sm leading-6 text-slate-500">{industry.examples}</p>
+                  <p className="mt-3 text-base leading-6 text-slate-500">{industry.examples}</p>
                 </div>
               </ScrollReveal>
             );
@@ -250,7 +297,7 @@ export function ProcessSection({ steps }: { steps: ProcessStepData[] }) {
     <section className={ds.section}>
       <Container>
         <div className="rounded-2xl bg-[var(--color-accent-muted)] px-6 py-12 sm:px-10 sm:py-14">
-          <ScrollReveal variant="fade-up">
+          <ScrollReveal variant="fade-up" delay={200}>
             <SectionHeading
               align="center"
               eyebrow="Our Process"
@@ -258,35 +305,7 @@ export function ProcessSection({ steps }: { steps: ProcessStepData[] }) {
               description="A transparent, milestone-led workflow from discovery through reporting."
             />
           </ScrollReveal>
-          <div className="relative mt-14 hidden lg:block">
-            <div className="absolute left-[12%] right-[12%] top-5 h-0.5 bg-[var(--color-accent-soft)]" />
-            <div className="relative grid grid-cols-4 gap-6">
-              {steps.map((step, index) => (
-                <ScrollReveal key={step.id ?? step.number} variant="fade-up" delay={index * 120}>
-                  <div className="text-center">
-                    <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-primary)] text-sm font-bold text-white">
-                      {step.number}
-                    </div>
-                    <h3 className="mt-5 text-base font-bold text-slate-900">{step.title}</h3>
-                    <p className={`mt-2 ${ds.bodySm}`}>{step.summary}</p>
-                  </div>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:hidden">
-            {steps.map((step, index) => (
-              <ScrollReveal key={step.id ?? step.number} variant="fade-up" delay={index * 100}>
-                <div className={`${ds.card} p-5`}>
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-primary)] text-xs font-bold text-white">
-                    {step.number}
-                  </span>
-                  <h3 className="mt-4 text-base font-bold text-slate-900">{step.title}</h3>
-                  <p className={`mt-2 ${ds.bodySm}`}>{step.summary}</p>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
+          <ProcessSteps steps={steps} />
         </div>
       </Container>
     </section>
@@ -302,7 +321,7 @@ export function WhyChooseUsSection({
     <section className={ds.sectionMuted}>
       <Container className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
         <div>
-          <ScrollReveal variant="slide-left">
+          <ScrollReveal variant="slide-left" delay={200}>
             <SectionHeading
               eyebrow="Why Choose Us"
               title="Value-added services tailored to your needs"
@@ -311,10 +330,14 @@ export function WhyChooseUsSection({
           </ScrollReveal>
           <ul className="mt-8 space-y-4">
             {differentiators.slice(0, 4).map((item, index) => (
-              <ScrollReveal key={item.id ?? item.title} variant="slide-left" delay={index * 80}>
+              <ScrollReveal key={item.id ?? item.title} variant="slide-left" delay={200 + index * 120}>
                 <li className="flex items-start gap-3">
-                  <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--color-secondary-muted)] text-[var(--color-primary)]">
-                    <Check className="h-4 w-4" />
+                  <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[var(--color-secondary-muted)] text-[var(--color-primary)]">
+                    {item.image ? (
+                      <ContentImage src={item.image} alt={item.title} width={28} height={28} className="h-full w-full object-cover" curvy={false} />
+                    ) : (
+                      <Check className="h-4 w-4" />
+                    )}
                   </span>
                   <div>
                     <p className="text-sm font-semibold text-slate-900">{item.title}</p>
@@ -327,11 +350,13 @@ export function WhyChooseUsSection({
         </div>
         <div className="grid gap-5 sm:grid-cols-2">
           {differentiators.map((item, index) => (
-            <ScrollReveal key={item.id ?? item.title} variant="fade-up" delay={index * 80}>
+            <ScrollReveal key={item.id ?? item.title} variant="fade-up" delay={200 + index * 120}>
               <div className={`${ds.card} ${ds.cardPadding}`}>
-                <span className={ds.iconBox}>
-                  <Check className="h-5 w-5" />
-                </span>
+                <MediaThumb src={item.image} alt={item.title}>
+                  <span className={ds.iconBox}>
+                    <Check className="h-5 w-5" />
+                  </span>
+                </MediaThumb>
                 <h3 className={`mt-5 ${ds.h3}`}>{item.title}</h3>
                 <p className={`mt-2 ${ds.bodySm}`}>{item.summary}</p>
               </div>
@@ -343,47 +368,43 @@ export function WhyChooseUsSection({
   );
 }
 
-export function TestimonialsSection({
-  testimonials,
-  compact = false,
-}: {
-  testimonials: TestimonialData[];
-  compact?: boolean;
-}) {
-  const rows = compact ? testimonials.slice(0, 3) : testimonials;
-
+export function TeamSection({ members }: { members: TeamMemberData[] }) {
   return (
-    <section className={ds.sectionMuted}>
+    <section className={ds.section}>
       <Container>
-        <ScrollReveal variant="fade-up">
+        <ScrollReveal variant="fade-up" delay={200}>
           <SectionHeading
-            eyebrow="Testimonials"
-            title="Trusted by Businesses Like Yours"
-            description="Our clients value direct communication, structured execution, and recommendations that support better governance and reporting decisions."
+            align="center"
+            eyebrow="Team"
+            title="The people behind HBK & Associates"
+            description="Our partners and managers bring audit, tax, and advisory experience across Nepal’s key industries."
           />
         </ScrollReveal>
-        <div className="mt-10 grid gap-5 lg:grid-cols-3">
-          {rows.map((testimonial, index) => (
-            <ScrollReveal key={testimonial.id ?? testimonial.author} variant="fade-up" delay={index * 120}>
-              <div className={`${ds.card} ${ds.cardPadding}`}>
-                <div className="flex gap-0.5 text-amber-400">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-current" />
-                  ))}
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {members.map((member, index) => (
+            <ScrollReveal key={member.id ?? member.name} variant="fade-up" delay={200 + index * 120}>
+              <article className={`${ds.card} overflow-hidden`}>
+                <div className="relative h-56 w-full bg-[var(--color-secondary-muted)]">
+                  <ContentImage
+                    src={member.avatar}
+                    fallback="/images/team-placeholder.svg"
+                    alt={member.avatar ? member.name : ""}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
                 </div>
-                <p className={`mt-4 ${ds.bodySm}`}>&ldquo;{testimonial.quote}&rdquo;</p>
-                <div className="mt-6 flex items-center gap-3 border-t border-slate-100 pt-5">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-secondary-muted)] text-sm font-bold text-[var(--color-primary)]">
-                    {testimonial.author.charAt(0)}
-                  </span>
-                  <div>
-                    <p className="text-sm font-bold text-slate-900">{testimonial.author}</p>
-                    <p className="text-xs text-slate-500">
-                      {testimonial.role}, {testimonial.company}
-                    </p>
-                  </div>
+                <div className={ds.cardPadding}>
+                  <h3 className={ds.h3}>{member.name}</h3>
+                  <p className="mt-1 text-[15px] font-semibold text-[var(--color-primary)]">{member.role}</p>
+                  <p className="mt-3 text-xs font-bold uppercase tracking-wide text-slate-500">
+                    {member.qualifications}
+                  </p>
+                  {member.email ? (
+                    <p className="mt-3 text-sm text-slate-600">{member.email}</p>
+                  ) : null}
                 </div>
-              </div>
+              </article>
             </ScrollReveal>
           ))}
         </div>
@@ -392,15 +413,47 @@ export function TestimonialsSection({
   );
 }
 
+export function TestimonialsSection({
+  testimonials,
+}: {
+  testimonials: TestimonialData[];
+}) {
+  return (
+    <section className={ds.sectionMuted}>
+      <Container>
+        <ScrollReveal variant="fade-up" delay={200}>
+          <SectionHeading
+            eyebrow="Client Feedback"
+            title="Trusted by Businesses Like Yours"
+            description="Our clients value direct communication, structured execution, and recommendations that support better governance and reporting decisions."
+          />
+        </ScrollReveal>
+        <TestimonialsCarousel testimonials={testimonials} />
+      </Container>
+    </section>
+  );
+}
+
 export function ContactSection({ contact }: { contact: ContactInfoData }) {
   return (
     <div className={`${ds.card} ${ds.cardPadding}`}>
+      {contact.image ? (
+        <div className="relative mb-6 h-40 [filter:drop-shadow(0_12px_24px_rgba(15,23,42,0.1))]">
+          <ContentImage
+            src={contact.image}
+            alt={contact.officeTitle}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 40vw"
+          />
+        </div>
+      ) : null}
       <SectionHeading
         eyebrow="Contact Information"
         title={contact.officeTitle}
         description="Reach our team directly for audit, tax, or advisory support."
       />
-      <div className="mt-8 space-y-6 text-sm leading-7 text-slate-600">
+      <div className="mt-8 space-y-6 text-[15px] leading-7 text-slate-600">
         <div className="flex gap-4">
           <Phone className="mt-1 h-5 w-5 text-[var(--color-primary)]" />
           <div>
@@ -425,7 +478,7 @@ export function ContactSection({ contact }: { contact: ContactInfoData }) {
       </div>
       <div className="mt-8 rounded-xl bg-slate-900 p-6 text-white">
         <p className="text-sm font-semibold">Business Hours</p>
-        <p className="mt-2 text-sm leading-7 text-slate-300">{contact.hours}</p>
+        <p className="mt-2 text-[15px] leading-7 text-slate-300">{contact.hours}</p>
       </div>
       {contact.mapEmbedUrl ? (
         <Link href={contact.mapEmbedUrl} target="_blank" rel="noreferrer" className={`mt-6 ${ds.link}`}>
@@ -434,5 +487,67 @@ export function ContactSection({ contact }: { contact: ContactInfoData }) {
         </Link>
       ) : null}
     </div>
+  );
+}
+
+export function ContactInquirySection({
+  contact,
+  formStatus,
+  returnTo = "/contact",
+}: {
+  contact: ContactInfoData;
+  formStatus?: string;
+  returnTo?: string;
+}) {
+  return (
+    <>
+      <section className={ds.sectionMuted}>
+        <Container>
+          <ScrollReveal variant="fade-up" delay={200}>
+            <SectionHeading
+              align="center"
+              eyebrow="Contact Us"
+              title="Start a Conversation With Our Team"
+              description="Call, email, or send a consultation request. We will follow up with the right audit, tax, or advisory support for your organization."
+            />
+          </ScrollReveal>
+          <div className="mt-12 grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+            <ScrollReveal variant="fade-up" delay={200}>
+              <ContactSection contact={contact} />
+            </ScrollReveal>
+            <ScrollReveal variant="slide-right" delay={220}>
+              <ContactForm status={formStatus} returnTo={returnTo} />
+            </ScrollReveal>
+          </div>
+        </Container>
+      </section>
+      <LocationMapSection contact={contact} />
+    </>
+  );
+}
+
+export function LocationMapSection({ contact }: { contact: ContactInfoData }) {
+  if (!contact.mapEmbedUrl && !contact.address) {
+    return null;
+  }
+
+  return (
+    <section className={ds.section}>
+      <Container>
+        <ScrollReveal variant="fade-up" delay={200}>
+          <SectionHeading
+            align="center"
+            eyebrow="Our Location"
+            title="Visit Our Office"
+            description={contact.address}
+          />
+        </ScrollReveal>
+        <ScrollReveal variant="fade-up" delay={280}>
+          <div className="mt-12 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)]">
+            <LocationMap mapUrl={contact.mapEmbedUrl} address={contact.address} title={contact.officeTitle} />
+          </div>
+        </ScrollReveal>
+      </Container>
+    </section>
   );
 }

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #f5f8fc;
   --foreground: #0f172a;
 
   /* Primary — main brand actions, links, key UI */
@@ -24,7 +24,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-montserrat);
+  --font-sans: var(--font-montserrat), var(--font-devanagari), system-ui, sans-serif;
   --color-primary: #2563eb;
   --color-primary-dark: #1d4ed8;
   --color-primary-foreground: #ffffff;
@@ -51,7 +51,7 @@
   body {
     background: var(--background);
     color: var(--foreground);
-    font-family: var(--font-montserrat), system-ui, sans-serif;
+    font-family: var(--font-montserrat), var(--font-devanagari), system-ui, sans-serif;
   }
 
   a {
@@ -65,4 +65,319 @@
   button {
     font: inherit;
   }
+}
+
+iframe.goog-te-banner-frame,
+.goog-te-banner-frame,
+.goog-te-balloon-frame,
+.goog-te-gadget,
+body > .skiptranslate,
+#goog-gt-tt,
+.goog-tooltip {
+  display: none !important;
+}
+
+#google_translate_element {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+body {
+  top: 0 !important;
+}
+
+html.translated-ltr font {
+  font-family: var(--font-devanagari), var(--font-montserrat), system-ui, sans-serif;
+}
+
+html.hbk-translating {
+  overflow: hidden;
+}
+
+#hbk-translate-loader {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  background: var(--background);
+}
+
+html.hbk-translating #hbk-translate-loader {
+  display: flex;
+}
+
+.hbk-translate-spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  border: 3px solid var(--color-secondary-muted);
+  border-top-color: var(--color-primary);
+  animation: hbk-spin 0.7s linear infinite;
+}
+
+@keyframes hbk-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hbk-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.hbk-float {
+  animation: hbk-float 5.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hbk-float {
+    animation: none;
+  }
+}
+
+@keyframes hbk-process-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2.35);
+    opacity: 0;
+  }
+}
+
+.hbk-process-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 2px solid var(--color-primary);
+  animation: hbk-process-ring 2.8s ease-out forwards;
+  pointer-events: none;
+}
+
+.hbk-process-ring--late {
+  animation-delay: 0.6s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hbk-process-ring {
+    display: none;
+    animation: none;
+  }
+}
+
+.img-curvy {
+  -webkit-clip-path: polygon(
+    28.74% 0%,
+    31.72% 0%,
+    34.71% 0.23%,
+    37.7% 0.23%,
+    40.92% 0.46%,
+    43.91% 0.69%,
+    46.9% 0.92%,
+    50.11% 1.38%,
+    53.1% 1.83%,
+    56.09% 2.29%,
+    59.31% 2.75%,
+    62.3% 3.44%,
+    65.29% 4.13%,
+    68.51% 5.05%,
+    71.49% 5.96%,
+    74.48% 6.88%,
+    77.7% 8.03%,
+    80.69% 9.4%,
+    83.68% 10.78%,
+    86.67% 12.39%,
+    89.89% 14.45%,
+    92.87% 16.74%,
+    95.86% 19.72%,
+    97.93% 22.94%,
+    99.31% 25.92%,
+    100% 28.9%,
+    100% 32.11%,
+    99.77% 35.09%,
+    99.54% 38.07%,
+    99.08% 41.28%,
+    98.62% 44.27%,
+    97.93% 47.25%,
+    97.01% 50.46%,
+    95.86% 53.44%,
+    94.71% 56.42%,
+    93.56% 59.4%,
+    91.95% 62.61%,
+    90.34% 65.6%,
+    88.51% 68.58%,
+    86.21% 71.79%,
+    83.68% 74.77%,
+    81.15% 77.75%,
+    77.93% 80.96%,
+    74.94% 83.72%,
+    71.95% 86.01%,
+    68.74% 88.3%,
+    65.75% 90.14%,
+    62.76% 91.74%,
+    59.54% 93.35%,
+    56.55% 94.72%,
+    53.56% 95.87%,
+    50.57% 96.79%,
+    47.36% 97.71%,
+    44.37% 98.39%,
+    41.38% 98.85%,
+    38.16% 99.31%,
+    35.17% 99.77%,
+    32.18% 99.77%,
+    28.97% 99.77%,
+    25.98% 99.31%,
+    22.99% 97.94%,
+    19.77% 95.64%,
+    17.01% 92.89%,
+    14.48% 89.91%,
+    12.41% 86.7%,
+    10.8% 83.72%,
+    9.43% 80.73%,
+    8.28% 77.75%,
+    6.9% 74.54%,
+    5.98% 71.56%,
+    5.06% 68.58%,
+    4.14% 65.37%,
+    3.45% 62.39%,
+    2.99% 59.4%,
+    2.3% 56.19%,
+    1.84% 53.21%,
+    1.38% 50.23%,
+    0.92% 47.02%,
+    0.69% 44.04%,
+    0.46% 41.06%,
+    0.23% 37.84%,
+    0.23% 34.86%,
+    0% 31.88%,
+    0% 28.9%,
+    0.46% 25.69%,
+    0.92% 22.71%,
+    1.84% 19.72%,
+    3.22% 16.51%,
+    5.06% 13.53%,
+    7.13% 10.55%,
+    10.34% 7.34%,
+    13.33% 5.05%,
+    16.32% 3.44%,
+    19.54% 2.06%,
+    22.53% 0.92%,
+    25.52% 0.46%
+  );
+  clip-path: polygon(
+    28.74% 0%,
+    31.72% 0%,
+    34.71% 0.23%,
+    37.7% 0.23%,
+    40.92% 0.46%,
+    43.91% 0.69%,
+    46.9% 0.92%,
+    50.11% 1.38%,
+    53.1% 1.83%,
+    56.09% 2.29%,
+    59.31% 2.75%,
+    62.3% 3.44%,
+    65.29% 4.13%,
+    68.51% 5.05%,
+    71.49% 5.96%,
+    74.48% 6.88%,
+    77.7% 8.03%,
+    80.69% 9.4%,
+    83.68% 10.78%,
+    86.67% 12.39%,
+    89.89% 14.45%,
+    92.87% 16.74%,
+    95.86% 19.72%,
+    97.93% 22.94%,
+    99.31% 25.92%,
+    100% 28.9%,
+    100% 32.11%,
+    99.77% 35.09%,
+    99.54% 38.07%,
+    99.08% 41.28%,
+    98.62% 44.27%,
+    97.93% 47.25%,
+    97.01% 50.46%,
+    95.86% 53.44%,
+    94.71% 56.42%,
+    93.56% 59.4%,
+    91.95% 62.61%,
+    90.34% 65.6%,
+    88.51% 68.58%,
+    86.21% 71.79%,
+    83.68% 74.77%,
+    81.15% 77.75%,
+    77.93% 80.96%,
+    74.94% 83.72%,
+    71.95% 86.01%,
+    68.74% 88.3%,
+    65.75% 90.14%,
+    62.76% 91.74%,
+    59.54% 93.35%,
+    56.55% 94.72%,
+    53.56% 95.87%,
+    50.57% 96.79%,
+    47.36% 97.71%,
+    44.37% 98.39%,
+    41.38% 98.85%,
+    38.16% 99.31%,
+    35.17% 99.77%,
+    32.18% 99.77%,
+    28.97% 99.77%,
+    25.98% 99.31%,
+    22.99% 97.94%,
+    19.77% 95.64%,
+    17.01% 92.89%,
+    14.48% 89.91%,
+    12.41% 86.7%,
+    10.8% 83.72%,
+    9.43% 80.73%,
+    8.28% 77.75%,
+    6.9% 74.54%,
+    5.98% 71.56%,
+    5.06% 68.58%,
+    4.14% 65.37%,
+    3.45% 62.39%,
+    2.99% 59.4%,
+    2.3% 56.19%,
+    1.84% 53.21%,
+    1.38% 50.23%,
+    0.92% 47.02%,
+    0.69% 44.04%,
+    0.46% 41.06%,
+    0.23% 37.84%,
+    0.23% 34.86%,
+    0% 31.88%,
+    0% 28.9%,
+    0.46% 25.69%,
+    0.92% 22.71%,
+    1.84% 19.72%,
+    3.22% 16.51%,
+    5.06% 13.53%,
+    7.13% 10.55%,
+    10.34% 7.34%,
+    13.33% 5.05%,
+    16.32% 3.44%,
+    19.54% 2.06%,
+    22.53% 0.92%,
+    25.52% 0.46%
+  );
 }
