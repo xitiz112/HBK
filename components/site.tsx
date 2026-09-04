@@ -62,6 +62,49 @@ export {
 
 type IconComponent = typeof ShieldCheck;
 
+const SERVICE_IMAGE_FALLBACKS: Record<string, string> = {
+  "service-audit": "/images/service-audit.png",
+  "service-tax": "/images/service-tax.png",
+  "service-banking-report": "/images/service-banking.png",
+  "service-accounting": "/images/service-accounting.png",
+  ShieldCheck: "/images/service-audit.png",
+  Receipt: "/images/service-tax.png",
+  FileText: "/images/service-banking.png",
+  Calculator: "/images/service-accounting.png",
+};
+
+const INDUSTRY_IMAGE_FALLBACKS: Record<string, string> = {
+  "industry-construction": "/images/industry-construction.png",
+  "industry-manpower": "/images/industry-manpower.png",
+  "industry-newsportal": "/images/industry-newsportal.png",
+  "industry-advertisement": "/images/industry-advertisement.png",
+  "industry-software": "/images/industry-software.png",
+};
+
+function serviceCardImage(service: ServiceData) {
+  return (
+    service.image ||
+    (service.id ? SERVICE_IMAGE_FALLBACKS[service.id] : undefined) ||
+    SERVICE_IMAGE_FALLBACKS[service.icon]
+  );
+}
+
+function industryCardImage(industry: IndustryData) {
+  if (industry.image) {
+    return industry.image;
+  }
+  if (industry.id && INDUSTRY_IMAGE_FALLBACKS[industry.id]) {
+    return INDUSTRY_IMAGE_FALLBACKS[industry.id];
+  }
+  const key = industry.name.toLowerCase();
+  if (/construct|contractor|builder|civil/.test(key)) return INDUSTRY_IMAGE_FALLBACKS["industry-construction"];
+  if (/manpower|staff|recruit|labour|labor/.test(key)) return INDUSTRY_IMAGE_FALLBACKS["industry-manpower"];
+  if (/news|media|portal|press/.test(key)) return INDUSTRY_IMAGE_FALLBACKS["industry-newsportal"];
+  if (/advert|marketing|agency/.test(key)) return INDUSTRY_IMAGE_FALLBACKS["industry-advertisement"];
+  if (/software|tech|it\b|digital|saas/.test(key)) return INDUSTRY_IMAGE_FALLBACKS["industry-software"];
+  return undefined;
+}
+
 const serviceIcons: Record<string, IconComponent> = {
   ShieldCheck,
   Receipt,
@@ -130,15 +173,16 @@ export function AboutPreview({ about }: { about: AboutContentData }) {
           </ScrollReveal>
         </div>
         <ScrollReveal variant="slide-right" delay={280}>
-          <div className="relative aspect-square w-full max-w-lg [filter:drop-shadow(0_18px_36px_rgba(15,23,42,0.12))] lg:max-w-none">
+          <div className="group img-curvy relative aspect-square w-full max-w-lg overflow-hidden [filter:drop-shadow(0_18px_36px_rgba(15,23,42,0.12))] lg:max-w-none">
             <ContentImage
               src={about.image}
               fallback="/images/about-office.png"
               alt="HBK & Associates professional team"
-              fill
+              width={800}
+              height={800}
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-              curvy
+              className="block h-full w-full object-cover transition-transform duration-500 ease-out hover:scale-110 group-hover:scale-110"
+              curvy={false}
             />
           </div>
         </ScrollReveal>
@@ -170,28 +214,32 @@ export function ServicesSection({
         <div className="mt-12 grid gap-x-5 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
           {rows.map((service, index) => {
             const Icon = serviceIcons[service.icon] ?? ShieldCheck;
+            const image = serviceCardImage(service);
             return (
               <ScrollReveal key={service.id ?? `${service.title}-${index}`} variant="fade-up" delay={200 + index * 120}>
               <div
-                className="group h-[280px] [perspective:1000px]"
+                className="group h-[300px] [perspective:1000px]"
               >
                 {/* Flip container */}
-                <div className="relative h-[280px] w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                <div className="relative h-[300px] w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
 
                   {/* Front face */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-white p-6 text-center shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)] [backface-visibility:hidden]">
-                    <MediaThumb src={service.image} alt={service.title}>
-                      <div className={ds.iconBox}>
-                        <Icon className="h-5 w-5" />
+                  <div className="absolute inset-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-900 shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)] [backface-visibility:hidden]">
+                    {image ? (
+                      <ContentImage src={image} alt={service.title} fill className="object-cover" sizes="(max-width: 640px) 100vw, 360px" curvy={false} />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center bg-[var(--color-secondary-muted)]">
+                        <Icon className="h-8 w-8 text-[var(--color-primary)]" />
                       </div>
-                    </MediaThumb>
-                    <h3 className={`mt-5 ${ds.h3}`}>{service.title}</h3>
-                    <p className={`mt-2 ${ds.bodySm}`}>{service.summary}</p>
+                    )}
+                    <div className="absolute inset-0 flex items-center justify-center bg-slate-950/40 px-5">
+                      <h3 className="text-center text-xl font-bold text-white drop-shadow">{service.title}</h3>
+                    </div>
                   </div>
 
                   {/* Back face */}
                   <div className="absolute inset-0 flex flex-col items-center justify-center rounded-xl bg-[var(--color-primary)] p-6 pb-10 text-center [backface-visibility:hidden] [transform:rotateY(180deg)]">
-                    <MediaThumb src={service.image} alt={service.title}>
+                    <MediaThumb src={image} alt={service.title}>
                       <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/20 text-white">
                         <Icon className="h-5 w-5" />
                       </div>
@@ -202,7 +250,7 @@ export function ServicesSection({
                     </p>
                     <Link
                       href="/services"
-                      className="absolute bottom-0 left-1/2 inline-flex -translate-x-1/2 translate-y-1/2 items-center gap-2 rounded-lg border border-white bg-white px-5 py-2.5 text-base font-semibold text-[var(--color-primary)] shadow-[0px_4px_12px_rgba(0,0,0,0.15)] transition hover:bg-blue-50"
+                      className="absolute bottom-0 left-1/2 inline-flex -translate-x-1/2 translate-y-1/2 items-center gap-2 rounded-lg border border-white bg-white px-5 py-2.5 text-[15px] font-semibold text-[var(--color-primary)] shadow-[0px_4px_12px_rgba(0,0,0,0.15)] transition hover:bg-blue-50"
                     >
                       Get Started
                       <ArrowRight className="h-4 w-4" />
@@ -239,18 +287,28 @@ export function IndustriesSection({
               description="We tailor our audit and advisory approach to sector-specific risks, reporting expectations, and compliance realities."
             />
           </ScrollReveal>
-          <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
-            {industries.map((industry, index) => {
+          <div className="mt-12 grid auto-rows-fr grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+            {industries.map((industry) => {
               const Icon = getIndustryIcon(industry);
+              const image = industryCardImage(industry);
               return (
-                <ScrollReveal key={industry.id ?? industry.name} variant="fade-up" delay={200 + index * 90}>
-                  <div className={`flex flex-col items-center ${ds.card} px-3 py-6 text-center`}>
-                    <div className={ds.iconCircle}>
+                <div
+                  key={industry.id ?? industry.name}
+                  className={`relative flex h-full min-h-[210px] flex-col items-center justify-end overflow-hidden ${ds.card} p-0`}
+                >
+                  {image ? (
+                    <ContentImage src={image} alt={industry.name} fill className="object-cover" sizes="(max-width: 768px) 50vw, 20vw" curvy={false} />
+                  ) : (
+                    <div className="absolute inset-0 bg-[var(--color-secondary-muted)]" />
+                  )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/25 to-transparent" />
+                  <div className="relative z-10 flex w-full flex-col items-center px-3 py-5 text-center">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/20 text-white">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <p className="mt-3 text-base font-semibold text-slate-800">{industry.name}</p>
+                    <p className="mt-3 text-[15px] font-semibold text-white">{industry.name}</p>
                   </div>
-                </ScrollReveal>
+                </div>
               );
             })}
           </div>
@@ -270,20 +328,30 @@ export function IndustriesSection({
             description="We tailor our work to each industry's reporting expectations, compliance pressure points, and internal control realities."
           />
         </ScrollReveal>
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {industries.map((industry, index) => {
+        <div className="mt-12 grid auto-rows-fr gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {industries.map((industry) => {
             const Icon = getIndustryIcon(industry);
+            const image = industryCardImage(industry);
             return (
-              <ScrollReveal key={industry.id ?? industry.name} variant="fade-up" delay={200 + index * 120}>
-                <div className={`${ds.card} ${ds.cardPadding}`}>
-                  <div className={ds.iconBox}>
+              <article
+                key={industry.id ?? industry.name}
+                className={`relative flex h-full min-h-[280px] flex-col overflow-hidden ${ds.card} p-0`}
+              >
+                {image ? (
+                  <ContentImage src={image} alt={industry.name} fill className="object-cover" sizes="(max-width: 1024px) 50vw, 33vw" curvy={false} />
+                ) : (
+                  <div className="absolute inset-0 bg-[var(--color-secondary-muted)]" />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/40 to-slate-950/10" />
+                <div className="relative z-10 flex h-full flex-col p-6">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/20 text-white">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <h3 className="mt-5 text-[22px] font-bold text-slate-900">{industry.name}</h3>
-                  <p className={`mt-2 ${ds.bodySm}`}>{industry.summary}</p>
-                  <p className="mt-3 text-base leading-6 text-slate-500">{industry.examples}</p>
+                  <h3 className="mt-5 text-[22px] font-bold text-white">{industry.name}</h3>
+                  <p className="mt-2 text-[15px] leading-6 text-white/85">{industry.summary}</p>
+                  <p className="mt-auto pt-3 text-[15px] leading-6 text-white/70">{industry.examples}</p>
                 </div>
-              </ScrollReveal>
+              </article>
             );
           })}
         </div>

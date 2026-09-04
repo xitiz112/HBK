@@ -1,6 +1,6 @@
 export type SiteLanguage = "en" | "ne";
 
-export const DEFAULT_SITE_LANGUAGE: SiteLanguage = "ne";
+export const DEFAULT_SITE_LANGUAGE: SiteLanguage = "en";
 export const TRANSLATING_CLASS = "hbk-translating";
 
 const COOKIE = "googtrans";

@@ -150,6 +150,7 @@ export const defaultServices: ServiceData[] = [
     details:
       "We perform statutory audits, internal reviews, and assurance engagements with a disciplined methodology focused on risk, controls, and reporting accuracy.",
     icon: "ShieldCheck",
+    image: "/images/service-audit.png",
   },
   {
     id: "service-tax",
@@ -158,6 +159,7 @@ export const defaultServices: ServiceData[] = [
     details:
       "From periodic filings to tax planning and advisory, we help organizations manage obligations while identifying practical efficiencies.",
     icon: "Receipt",
+    image: "/images/service-tax.png",
   },
   {
     id: "service-banking-report",
@@ -166,6 +168,7 @@ export const defaultServices: ServiceData[] = [
     details:
       "We prepare financial reports and supporting documentation required by banks and financial institutions for credit assessment, loan processing, and periodic review.",
     icon: "FileText",
+    image: "/images/service-banking.png",
   },
   {
     id: "service-accounting",
@@ -174,6 +177,7 @@ export const defaultServices: ServiceData[] = [
     details:
       "We handle day-to-day accounting, reconciliations, and month-end close on an outsourced basis, giving management reliable numbers without building a full in-house finance team.",
     icon: "Calculator",
+    image: "/images/service-accounting.png",
   },
 ];
 
@@ -183,30 +187,35 @@ export const defaultIndustries: IndustryData[] = [
     name: "Construction companies",
     summary: "Project accounting, costing, and compliance support for contractors and developers.",
     examples: "Project costing, work-in-progress, tax filings, bank reporting.",
+    image: "/images/industry-construction.png",
   },
   {
     id: "industry-manpower",
     name: "Manpower companies",
     summary: "Payroll, statutory compliance, and financial reporting for staffing and recruitment firms.",
     examples: "Payroll controls, labour-related filings, management accounts, audit support.",
+    image: "/images/industry-manpower.png",
   },
   {
     id: "industry-newsportal",
     name: "News portal",
     summary: "Accounting and tax support for media and digital news businesses.",
     examples: "Revenue tracking, advertising income, expense controls, statutory audit.",
+    image: "/images/industry-newsportal.png",
   },
   {
     id: "industry-advertisement",
     name: "Advertisement agencies",
     summary: "Financial reporting and tax consulting for advertising and communications agencies.",
     examples: "Client billing, campaign costing, VAT/TDS, year-end reporting.",
+    image: "/images/industry-advertisement.png",
   },
   {
     id: "industry-software",
     name: "Software companies",
     summary: "Audit, tax, and accounting outsourcing for software and technology firms.",
     examples: "Recurring revenue, payroll, tax consulting, banking-purpose reports.",
+    image: "/images/industry-software.png",
   },
 ];
 

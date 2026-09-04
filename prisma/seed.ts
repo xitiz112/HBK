@@ -50,6 +50,7 @@ async function main() {
       primaryCtaHref: "/contact",
       secondaryCtaText: "Explore Services",
       secondaryCtaHref: "/services",
+      image: "/images/hero-office.png",
     },
     create: {
       id: "hero",
@@ -61,6 +62,7 @@ async function main() {
       primaryCtaHref: "/contact",
       secondaryCtaText: "Explore Services",
       secondaryCtaHref: "/services",
+      image: "/images/hero-office.png",
     },
   });
 
@@ -135,6 +137,7 @@ async function main() {
       details:
         "We perform statutory audits, internal reviews, and assurance engagements with a disciplined methodology focused on risk, controls, and reporting accuracy.",
       icon: "ShieldCheck",
+      image: "/images/service-audit.png",
       order: 1,
     },
     {
@@ -144,6 +147,7 @@ async function main() {
       details:
         "From periodic filings to tax planning and advisory, we help organizations manage obligations while identifying practical efficiencies.",
       icon: "Receipt",
+      image: "/images/service-tax.png",
       order: 2,
     },
     {
@@ -153,6 +157,7 @@ async function main() {
       details:
         "We prepare financial reports and supporting documentation required by banks and financial institutions for credit assessment, loan processing, and periodic review.",
       icon: "FileText",
+      image: "/images/service-banking.png",
       order: 3,
     },
     {
@@ -162,6 +167,7 @@ async function main() {
       details:
         "We handle day-to-day accounting, reconciliations, and month-end close on an outsourced basis, giving management reliable numbers without building a full in-house finance team.",
       icon: "Calculator",
+      image: "/images/service-accounting.png",
       order: 4,
     },
   ];
@@ -180,6 +186,7 @@ async function main() {
       name: "Construction companies",
       summary: "Project accounting, costing, and compliance support for contractors and developers.",
       examples: "Project costing, work-in-progress, tax filings, bank reporting.",
+      image: "/images/industry-construction.png",
       order: 1,
     },
     {
@@ -187,6 +194,7 @@ async function main() {
       name: "Manpower companies",
       summary: "Payroll, statutory compliance, and financial reporting for staffing and recruitment firms.",
       examples: "Payroll controls, labour-related filings, management accounts, audit support.",
+      image: "/images/industry-manpower.png",
       order: 2,
     },
     {
@@ -194,6 +202,7 @@ async function main() {
       name: "News portal",
       summary: "Accounting and tax support for media and digital news businesses.",
       examples: "Revenue tracking, advertising income, expense controls, statutory audit.",
+      image: "/images/industry-newsportal.png",
       order: 3,
     },
     {
@@ -201,6 +210,7 @@ async function main() {
       name: "Advertisement agencies",
       summary: "Financial reporting and tax consulting for advertising and communications agencies.",
       examples: "Client billing, campaign costing, VAT/TDS, year-end reporting.",
+      image: "/images/industry-advertisement.png",
       order: 4,
     },
     {
@@ -208,6 +218,7 @@ async function main() {
       name: "Software companies",
       summary: "Audit, tax, and accounting outsourcing for software and technology firms.",
       examples: "Recurring revenue, payroll, tax consulting, banking-purpose reports.",
+      image: "/images/industry-software.png",
       order: 5,
     },
   ];

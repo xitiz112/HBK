@@ -2,10 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
+  ArrowUpRight,
 } from "lucide-react";
 
-import { ContentImage } from "@/components/content-image";
 import LiquidButton from "@/components/liquid-button";
+import { mediaSrc } from "@/lib/media";
 import {
   Container,
   CtaBanner,
@@ -58,58 +59,39 @@ const blogPosts = [
   },
 ];
 
-function HomeHero({ hero, stats }: { hero: HeroContentData; stats: CompanyStatData[] }) {
+function HomeHero({ hero }: { hero: HeroContentData }) {
+  const background = mediaSrc(hero.image) || "/images/hero-office.png";
+
   return (
-    <section className="pb-10 pt-3 sm:pt-5">
-      <Container className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
-        <div>
+    <section
+      className="relative isolate min-h-[520px] overflow-hidden bg-cover bg-center bg-fixed sm:min-h-[600px]"
+      style={{ backgroundImage: `url("${background}")` }}
+    >
+      <div className="absolute inset-0 bg-slate-950/60" />
+      <Container className="relative z-10 flex min-h-[520px] items-center justify-center py-16 text-center sm:min-h-[600px] sm:py-24">
+        <div className="relative max-w-3xl">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-[-48px] -z-10 rounded-[48px] bg-[radial-gradient(ellipse_at_center,rgba(2,6,23,0.58)_0%,rgba(2,6,23,0.22)_52%,transparent_76%)]"
+          />
           <ScrollReveal variant="fade-up" threshold={0} delay={0} duration={650}>
-            <h1 className="max-w-xl text-[40px] font-bold leading-[1.08] tracking-tight text-slate-900 sm:text-[52px]">
+            <h1 className="text-[40px] font-bold leading-[1.08] tracking-tight text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.85),0_2px_12px_rgba(0,0,0,0.7)] sm:text-[52px]">
               Building Trust Through{" "}
-              <span className="text-[var(--color-primary)]">Professional Excellence</span>
+              <span className="text-[var(--color-accent)]">Professional Excellence</span>
             </h1>
           </ScrollReveal>
           <ScrollReveal variant="fade-up" threshold={0} delay={220} duration={650}>
-            <p className={`mt-5 max-w-lg ${ds.body}`}>{hero.subtitle}</p>
+            <p className="mx-auto mt-5 max-w-2xl text-[17px] leading-7 text-white">{hero.subtitle}</p>
           </ScrollReveal>
           <ScrollReveal variant="fade-up" threshold={0} delay={420} duration={650}>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <LiquidButton href={hero.primaryCtaHref} variant="primary">
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <LiquidButton href={hero.primaryCtaHref} variant="primary" className="!border-0 hover:!border-0">
                 {hero.primaryCtaText}
+                <ArrowUpRight className="h-4 w-4" />
               </LiquidButton>
-              <LiquidButton href={hero.secondaryCtaHref} variant="secondary">
+              <LiquidButton href={hero.secondaryCtaHref} variant="secondary" className="!border-0 hover:!border-0">
                 {hero.secondaryCtaText}
               </LiquidButton>
-            </div>
-          </ScrollReveal>
-        </div>
-        <div className="relative">
-          <ScrollReveal variant="slide-right" threshold={0} delay={700} duration={850}>
-            <div className="hbk-float relative aspect-square w-full [filter:drop-shadow(0_20px_50px_rgba(15,23,42,0.12))]">
-              <ContentImage
-                src={hero.image}
-                fallback="/images/hero-audit-team.png"
-                alt="HBK audit professionals reviewing engagement materials"
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
-                curvy
-                priority
-              />
-            </div>
-          </ScrollReveal>
-          <ScrollReveal
-            variant="fade-up"
-            threshold={0}
-            delay={980}
-            duration={600}
-            className="absolute bottom-6 left-4 z-20 sm:bottom-8 sm:left-6"
-          >
-            <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-lg">
-              <p className="text-xs font-medium text-slate-500">Client Satisfaction</p>
-              <p className="text-lg font-bold text-[var(--color-primary)]">
-                {stats[2]?.value ?? "98%"}
-              </p>
             </div>
           </ScrollReveal>
         </div>
@@ -184,7 +166,7 @@ export function ReferenceHomePage(props: HomePageProps) {
   return (
     <main className="bg-background">
       <SiteHeader />
-      <HomeHero hero={props.hero} stats={props.stats} />
+      <HomeHero hero={props.hero} />
       <StatsBand stats={props.stats} delay={1450} />
       <ServicesSection services={props.services} compact />
       <IndustriesSection industries={props.industries} variant="tiles" />

@@ -45,13 +45,13 @@ export const ds = {
   body: "text-[17px] leading-7 text-slate-600",
   bodySm: "text-base leading-6 text-slate-600",
   btnPrimary:
-    "group relative overflow-hidden inline-flex items-center gap-2 rounded-lg border border-[var(--color-primary)] bg-white px-6 py-3 text-base font-semibold text-[var(--color-primary)]",
+    "group relative overflow-hidden inline-flex items-center gap-2 rounded-lg border border-[var(--color-primary)] bg-white px-6 py-3 text-[15px] font-semibold text-[var(--color-primary)]",
   btnSecondary:
-    "group relative overflow-hidden inline-flex items-center gap-2 rounded-lg border border-[var(--color-secondary)] bg-white px-6 py-3 text-base font-semibold text-[var(--color-secondary)]",
+    "group relative overflow-hidden inline-flex items-center gap-2 rounded-lg border border-[var(--color-secondary)] bg-white px-6 py-3 text-[15px] font-semibold text-[var(--color-secondary)]",
   btnSolid:
-    "group relative overflow-hidden inline-flex items-center gap-2 rounded-lg border border-[var(--color-primary)] bg-[var(--color-primary)] px-6 py-3 text-base font-semibold text-white",
+    "group relative overflow-hidden inline-flex items-center gap-2 rounded-lg border border-[var(--color-primary)] bg-[var(--color-primary)] px-6 py-3 text-[15px] font-semibold text-white",
   btnInverse:
-    "group relative overflow-hidden inline-flex items-center gap-2 rounded-lg border border-white bg-transparent px-6 py-3 text-base font-semibold text-white",
+    "group relative overflow-hidden inline-flex items-center gap-2 rounded-lg border border-white bg-transparent px-6 py-3 text-[15px] font-semibold text-white",
   link: "inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-primary)] hover:underline",
   input:
     "mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]",
@@ -59,7 +59,7 @@ export const ds = {
     "flex h-11 w-11 items-center justify-center rounded-lg bg-[var(--color-secondary-muted)] text-[var(--color-primary)]",
   iconCircle:
     "flex h-11 w-11 items-center justify-center rounded-full bg-[var(--color-secondary-muted)] text-[var(--color-primary)]",
-  footerLabel: "text-[18px] font-bold uppercase tracking-wider text-slate-400",
+  footerLabel: "text-[18px] font-bold capitalize text-slate-400",
 } as const;
 
 export function Container({

@@ -22,7 +22,7 @@ export default function ScrollReveal({
   children,
   variant = "fade-up",
   delay = 0,
-  threshold = 0.12,
+  threshold = 0,
   duration = 700,
   className = "",
 }: {
@@ -39,21 +39,56 @@ export default function ScrollReveal({
     const el = ref.current;
     if (!el) return;
 
+    let revealed = false;
+    const reveal = () => {
+      if (revealed) {
+        return;
+      }
+      revealed = true;
+      window.setTimeout(() => {
+        initialStyles[variant].split(" ").forEach((c) => el.classList.remove(c));
+        animatedStyles[variant].split(" ").forEach((c) => el.classList.add(c));
+      }, delay);
+    };
+
+    const isInView = () => {
+      const rect = el.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      return rect.bottom > 40 && rect.top < viewportHeight - 40;
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setTimeout(() => {
-            initialStyles[variant].split(" ").forEach((c) => el.classList.remove(c));
-            animatedStyles[variant].split(" ").forEach((c) => el.classList.add(c));
-          }, delay);
+          reveal();
           observer.disconnect();
         }
       },
-      { threshold },
+      { threshold, rootMargin: "80px 0px" },
     );
-
     observer.observe(el);
-    return () => observer.disconnect();
+
+    if (isInView()) {
+      reveal();
+      observer.disconnect();
+    }
+
+    const onScroll = () => {
+      if (isInView()) {
+        reveal();
+        observer.disconnect();
+        window.removeEventListener("scroll", onScroll);
+        window.removeEventListener("resize", onScroll);
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, [variant, delay, threshold]);
 
   return (

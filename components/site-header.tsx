@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Menu, X } from "lucide-react";
 
+import FloatingContact from "@/components/floating-contact";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { SiteBrand } from "@/components/site-brand";
 import {
@@ -32,7 +33,7 @@ function NavDropdown({
           <Link
             key={item.label}
             href={item.href}
-            className="flex items-center gap-2 px-4 py-2.5 text-base font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-[var(--color-primary)]"
+            className="flex items-center gap-2 px-4 py-2.5 text-[15px] font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-[var(--color-primary)]"
           >
             <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[var(--color-primary)]" />
             {item.label}
@@ -146,7 +147,7 @@ export default function SiteHeader({
             if (item.href === "/services") {
               return (
                 <div key={item.href} className="group relative">
-                  <Link href="/services" className="flex items-center gap-1 px-3 py-2 text-base font-medium text-slate-600 transition hover:text-[var(--color-primary)]">
+                  <Link href="/services" className="flex items-center gap-1 px-3 py-2 text-[15px] font-medium text-slate-600 transition hover:text-[var(--color-primary)]">
                     {item.label}
                     <Chevron className="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" />
                   </Link>
@@ -157,7 +158,7 @@ export default function SiteHeader({
             if (item.href === "/industries") {
               return (
                 <div key={item.href} className="group relative">
-                  <Link href="/industries" className="flex items-center gap-1 px-3 py-2 text-base font-medium text-slate-600 transition hover:text-[var(--color-primary)]">
+                  <Link href="/industries" className="flex items-center gap-1 px-3 py-2 text-[15px] font-medium text-slate-600 transition hover:text-[var(--color-primary)]">
                     {item.label}
                     <Chevron className="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" />
                   </Link>
@@ -169,7 +170,7 @@ export default function SiteHeader({
               <Link
                 key={item.href}
                 href={item.href}
-                className="px-3 py-2 text-base font-medium text-slate-600 transition hover:text-[var(--color-primary)]"
+                className="px-3 py-2 text-[15px] font-medium text-slate-600 transition hover:text-[var(--color-primary)]"
               >
                 {item.label}
               </Link>
@@ -179,9 +180,11 @@ export default function SiteHeader({
 
         <div className="flex items-center gap-2">
           <LanguageSwitcher className="hidden sm:inline-flex" />
-          <ButtonLink href="/contact" variant="solid" className="hidden px-5 py-2.5 xl:inline-flex">
-            Contact Us
-          </ButtonLink>
+          <span className="hidden xl:inline-flex">
+            <ButtonLink href="/contact" variant="solid" className="px-5 py-2.5">
+              Contact Us
+            </ButtonLink>
+          </span>
           <button
             type="button"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -213,7 +216,7 @@ export default function SiteHeader({
                     <button
                       type="button"
                       onClick={() => setOpenSection(expanded ? null : key)}
-                      className="flex w-full cursor-pointer items-center justify-between rounded-lg px-3 py-3 text-left text-base font-semibold text-slate-800"
+                      className="flex w-full cursor-pointer items-center justify-between rounded-lg px-3 py-3 text-left text-[15px] font-semibold text-slate-800"
                     >
                       {item.label}
                       <Chevron className={`h-4 w-4 transition-transform ${expanded ? "rotate-180" : ""}`} />
@@ -224,7 +227,7 @@ export default function SiteHeader({
                           <Link
                             href={item.href}
                             onClick={closeMenu}
-                            className="block rounded-lg px-3 py-2 text-base font-medium text-[var(--color-primary)]"
+                            className="block rounded-lg px-3 py-2 text-[15px] font-medium text-[var(--color-primary)]"
                           >
                             View all {item.label}
                           </Link>
@@ -234,7 +237,7 @@ export default function SiteHeader({
                             <Link
                               href={sub.href}
                               onClick={closeMenu}
-                              className="block rounded-lg px-3 py-2 text-base text-slate-600"
+                              className="block rounded-lg px-3 py-2 text-[15px] text-slate-600"
                             >
                               {sub.label}
                             </Link>
@@ -251,7 +254,7 @@ export default function SiteHeader({
                   <Link
                     href={item.href}
                     onClick={closeMenu}
-                    className="block rounded-lg px-3 py-3 text-base font-semibold text-slate-800"
+                    className="block rounded-lg px-3 py-3 text-[15px] font-semibold text-slate-800"
                   >
                     {item.label}
                   </Link>
@@ -270,6 +273,7 @@ export default function SiteHeader({
         </nav>
       </div>
     </header>
+    <FloatingContact />
     </>
   );
 }

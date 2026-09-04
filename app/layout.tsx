@@ -17,6 +17,8 @@ const notoDevanagari = Noto_Sans_Devanagari({
   subsets: ["devanagari", "latin"],
 });
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
   const hasIcon = Boolean(settings.favicon || settings.logo);
