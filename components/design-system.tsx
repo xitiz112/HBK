@@ -92,7 +92,11 @@ export function SectionHeading({
     <div className={wrap}>
       <Eyebrow>{eyebrow}</Eyebrow>
       <h2 className={`mt-3 ${ds.h2}`}>{title}</h2>
-      {description ? <p className={`mt-4 ${ds.body}`}>{description}</p> : null}
+      {description ? (
+        <p className="mt-4 text-[17px] leading-[1.6] text-slate-600">
+          {description}
+        </p>
+      ) : null}
     </div>
   );
 }

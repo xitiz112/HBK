@@ -38,14 +38,17 @@ function TestimonialCard({
   style?: CSSProperties;
 }) {
   return (
-    <article className={`${ds.card} ${ds.cardPadding} flex min-w-0 flex-col ${className}`} style={style}>
+    <article
+      className={`flex min-w-0 flex-col rounded-xl border border-white/20 bg-[var(--color-primary)] text-white shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0px_6px_16px_0px_rgba(99,99,99,0.25)] ${ds.cardPadding} ${className}`}
+      style={style}
+    >
       <div className="flex gap-0.5 text-amber-400">
         {Array.from({ length: 5 }).map((_, index) => (
           <Star key={index} className="h-4 w-4 fill-current" />
         ))}
       </div>
-      <p className={`mt-4 flex-1 ${ds.bodySm}`}>&ldquo;{testimonial.quote}&rdquo;</p>
-      <div className="mt-6 flex items-center gap-3 border-t border-slate-100 pt-5">
+      <p className="mt-4 flex-1 text-base leading-6 text-white">&ldquo;{testimonial.quote}&rdquo;</p>
+      <div className="mt-6 flex items-center gap-3 border-t border-white/20 pt-5">
         {testimonial.image ? (
           <span className="relative h-10 w-10 overflow-hidden rounded-full">
             <ContentImage
@@ -58,13 +61,13 @@ function TestimonialCard({
             />
           </span>
         ) : (
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-secondary-muted)] text-sm font-bold text-[var(--color-primary)]">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-sm font-bold text-white">
             {testimonial.author.charAt(0)}
           </span>
         )}
         <div>
-          <p className="text-[15px] font-bold text-slate-900">{testimonial.author}</p>
-          <p className="text-xs text-slate-500">
+          <p className="text-[15px] font-bold text-white">{testimonial.author}</p>
+          <p className="text-xs text-white/70">
             {testimonial.role}, {testimonial.company}
           </p>
         </div>

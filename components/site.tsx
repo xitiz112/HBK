@@ -1,13 +1,10 @@
 import Link from "next/link";
 import {
   ArrowRight,
-  BarChart3,
   Briefcase,
   Building2,
-  Calculator,
   Check,
   Factory,
-  FileText,
   HardHat,
   HeartPulse,
   Landmark,
@@ -16,8 +13,6 @@ import {
   MonitorSmartphone,
   Newspaper,
   Phone,
-  Receipt,
-  ShieldCheck,
   Users,
 } from "lucide-react";
 
@@ -25,6 +20,7 @@ import { ContactForm } from "@/components/contact-form";
 import { ContentImage } from "@/components/content-image";
 import { LocationMap } from "@/components/location-map";
 import { ProcessSteps } from "@/components/process-steps";
+import { ServiceCards } from "@/components/service-card";
 import { TestimonialsCarousel } from "@/components/testimonials-carousel";
 
 import {
@@ -60,7 +56,7 @@ export {
   StatusNotice,
 };
 
-type IconComponent = typeof ShieldCheck;
+type IconComponent = typeof Briefcase;
 
 const SERVICE_IMAGE_FALLBACKS: Record<string, string> = {
   "service-audit": "/images/service-audit.png",
@@ -104,15 +100,6 @@ function industryCardImage(industry: IndustryData) {
   if (/software|tech|it\b|digital|saas/.test(key)) return INDUSTRY_IMAGE_FALLBACKS["industry-software"];
   return undefined;
 }
-
-const serviceIcons: Record<string, IconComponent> = {
-  ShieldCheck,
-  Receipt,
-  Briefcase,
-  BarChart3,
-  FileText,
-  Calculator,
-};
 
 function getIndustryIcon(industry: Pick<IndustryData, "id" | "name">): IconComponent {
   const key = `${industry.id ?? ""} ${industry.name}`.toLowerCase();
@@ -211,58 +198,15 @@ export function ServicesSection({
             description="From independent assurance to tax and advisory support, we help organizations build confidence in their reporting and decision-making."
           />
         </ScrollReveal>
-        <div className="mt-12 grid gap-x-5 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-          {rows.map((service, index) => {
-            const Icon = serviceIcons[service.icon] ?? ShieldCheck;
-            const image = serviceCardImage(service);
-            return (
-              <ScrollReveal key={service.id ?? `${service.title}-${index}`} variant="fade-up" delay={200 + index * 120}>
-              <div
-                className="group h-[300px] [perspective:1000px]"
-              >
-                {/* Flip container */}
-                <div className="relative h-[300px] w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-
-                  {/* Front face */}
-                  <div className="absolute inset-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-900 shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)] [backface-visibility:hidden]">
-                    {image ? (
-                      <ContentImage src={image} alt={service.title} fill className="object-cover" sizes="(max-width: 640px) 100vw, 360px" curvy={false} />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center bg-[var(--color-secondary-muted)]">
-                        <Icon className="h-8 w-8 text-[var(--color-primary)]" />
-                      </div>
-                    )}
-                    <div className="absolute inset-0 flex items-center justify-center bg-slate-950/40 px-5">
-                      <h3 className="text-center text-xl font-bold text-white drop-shadow">{service.title}</h3>
-                    </div>
-                  </div>
-
-                  {/* Back face */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center rounded-xl bg-[var(--color-primary)] p-6 pb-10 text-center [backface-visibility:hidden] [transform:rotateY(180deg)]">
-                    <MediaThumb src={image} alt={service.title}>
-                      <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/20 text-white">
-                        <Icon className="h-5 w-5" />
-                      </div>
-                    </MediaThumb>
-                    <h3 className="mt-5 text-xl font-bold text-white">{service.title}</h3>
-                    <p className="mt-3 text-[15px] leading-6 text-blue-100">
-                      {service.details || service.summary}
-                    </p>
-                    <Link
-                      href="/services"
-                      className="absolute bottom-0 left-1/2 inline-flex -translate-x-1/2 translate-y-1/2 items-center gap-2 rounded-lg border border-white bg-white px-5 py-2.5 text-[15px] font-semibold text-[var(--color-primary)] shadow-[0px_4px_12px_rgba(0,0,0,0.15)] transition hover:bg-blue-50"
-                    >
-                      Get Started
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  </div>
-
-                </div>
-              </div>
-              </ScrollReveal>
-            );
-          })}
-        </div>
+        <ServiceCards
+          cards={rows.map((service, index) => ({
+            id: service.id ?? `${service.title}-${index}`,
+            title: service.title,
+            description: service.details || service.summary,
+            image: serviceCardImage(service),
+            icon: service.icon,
+          }))}
+        />
       </Container>
     </section>
   );
@@ -504,7 +448,7 @@ export function TestimonialsSection({
 
 export function ContactSection({ contact }: { contact: ContactInfoData }) {
   return (
-    <div className={`${ds.card} ${ds.cardPadding}`}>
+    <div className={`rounded-xl border border-white/20 bg-[var(--color-primary)] text-white shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0px_6px_16px_0px_rgba(99,99,99,0.25)] ${ds.cardPadding}`}>
       {contact.image ? (
         <div className="relative mb-6 h-40 [filter:drop-shadow(0_12px_24px_rgba(15,23,42,0.1))]">
           <ContentImage
@@ -516,40 +460,47 @@ export function ContactSection({ contact }: { contact: ContactInfoData }) {
           />
         </div>
       ) : null}
-      <SectionHeading
-        eyebrow="Contact Information"
-        title={contact.officeTitle}
-        description="Reach our team directly for audit, tax, or advisory support."
-      />
-      <div className="mt-8 space-y-6 text-[15px] leading-7 text-slate-600">
+      <div className="max-w-3xl">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/80">Contact Information</p>
+        <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">{contact.officeTitle}</h2>
+        <p className="mt-4 text-[17px] leading-7 text-white/80">
+          Reach our team directly for audit, tax, or advisory support.
+        </p>
+      </div>
+      <div className="mt-8 space-y-6 text-[15px] leading-7 text-white/80">
         <div className="flex gap-4">
-          <Phone className="mt-1 h-5 w-5 text-[var(--color-primary)]" />
+          <Phone className="mt-1 h-5 w-5 text-white" />
           <div>
-            <p className="font-semibold text-slate-900">Phone</p>
+            <p className="font-semibold text-white">Phone</p>
             <p>{contact.phone}</p>
           </div>
         </div>
         <div className="flex gap-4">
-          <Mail className="mt-1 h-5 w-5 text-[var(--color-primary)]" />
+          <Mail className="mt-1 h-5 w-5 text-white" />
           <div>
-            <p className="font-semibold text-slate-900">Email</p>
+            <p className="font-semibold text-white">Email</p>
             <p>{contact.email}</p>
           </div>
         </div>
         <div className="flex gap-4">
-          <Building2 className="mt-1 h-5 w-5 text-[var(--color-primary)]" />
+          <Building2 className="mt-1 h-5 w-5 text-white" />
           <div>
-            <p className="font-semibold text-slate-900">Office</p>
+            <p className="font-semibold text-white">Office</p>
             <p>{contact.address}</p>
           </div>
         </div>
       </div>
-      <div className="mt-8 rounded-xl bg-slate-900 p-6 text-white">
+      <div className="mt-8 rounded-xl bg-white/10 p-6 text-white">
         <p className="text-sm font-semibold">Business Hours</p>
-        <p className="mt-2 text-[15px] leading-7 text-slate-300">{contact.hours}</p>
+        <p className="mt-2 text-[15px] leading-7 text-white/80">{contact.hours}</p>
       </div>
       {contact.mapEmbedUrl ? (
-        <Link href={contact.mapEmbedUrl} target="_blank" rel="noreferrer" className={`mt-6 ${ds.link}`}>
+        <Link
+          href={contact.mapEmbedUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-white hover:underline"
+        >
           View map location
           <ArrowRight className="h-4 w-4" />
         </Link>

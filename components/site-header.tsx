@@ -262,14 +262,6 @@ export default function SiteHeader({
               );
             })}
           </ul>
-          <div className="mt-4 flex items-center justify-between gap-3">
-            <LanguageSwitcher className="sm:hidden" />
-            <div className="flex-1" onClick={closeMenu}>
-              <ButtonLink href="/contact" variant="solid" className="w-full justify-center px-5 py-3">
-                Contact Us
-              </ButtonLink>
-            </div>
-          </div>
         </nav>
       </div>
     </header>

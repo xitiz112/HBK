@@ -66,7 +66,10 @@ export function ContactForm({
         </label>
       </div>
       <button type="submit" className={`mt-6 ${ds.btnPrimary}`}>
-        Submit Inquiry
+        <span className="absolute inset-0 origin-left scale-x-0 bg-[var(--color-primary)] transition-transform duration-[420ms] ease-out group-hover:scale-x-100" />
+        <span className="relative z-10 transition-colors duration-300 group-hover:text-white">
+          Submit Inquiry
+        </span>
       </button>
     </form>
   );
