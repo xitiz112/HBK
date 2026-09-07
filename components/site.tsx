@@ -16,8 +16,10 @@ import {
   Users,
 } from "lucide-react";
 
+import { CardsCarousel } from "@/components/cards-carousel";
 import { ContactForm } from "@/components/contact-form";
 import { ContentImage } from "@/components/content-image";
+import { IndustryCards } from "@/components/industry-card";
 import { LocationMap } from "@/components/location-map";
 import { ProcessSteps } from "@/components/process-steps";
 import { ServiceCards } from "@/components/service-card";
@@ -145,8 +147,9 @@ export function AboutPreview({ about }: { about: AboutContentData }) {
           <ScrollReveal variant="slide-left" delay={200}>
             <SectionHeading
               eyebrow="About Us"
-              title="The HBK & Associates Story"
+              title="Our Story"
               description={about.story}
+              descriptionClassName="text-[17px] leading-[28px] text-slate-600"
             />
           </ScrollReveal>
           <ScrollReveal variant="fade-up" delay={280}>
@@ -194,8 +197,8 @@ export function ServicesSection({
           <SectionHeading
             align="center"
             eyebrow="Our Services"
-            title="Comprehensive Solutions for Your Business"
-            description="From independent assurance to tax and advisory support, we help organizations build confidence in their reporting and decision-making."
+            title="What we do"
+            description="Audit, tax, and accounting services."
           />
         </ScrollReveal>
         <ServiceCards
@@ -227,11 +230,16 @@ export function IndustriesSection({
             <SectionHeading
               align="center"
               eyebrow="Industries"
-              title="Empowering a Wide Range of Industries"
-              description="We tailor our audit and advisory approach to sector-specific risks, reporting expectations, and compliance realities."
+              title="Who we work with"
+              description="Businesses we support across different sectors."
             />
           </ScrollReveal>
-          <div className="mt-12 grid auto-rows-fr grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+          <CardsCarousel
+            ariaLabel="Industries"
+            prevLabel="Previous industries"
+            nextLabel="Next industries"
+            className="mt-12"
+          >
             {industries.map((industry) => {
               const Icon = getIndustryIcon(industry);
               const image = industryCardImage(industry);
@@ -241,21 +249,21 @@ export function IndustriesSection({
                   className={`relative flex h-full min-h-[210px] flex-col items-center justify-end overflow-hidden ${ds.card} p-0`}
                 >
                   {image ? (
-                    <ContentImage src={image} alt={industry.name} fill className="object-cover" sizes="(max-width: 768px) 50vw, 20vw" curvy={false} />
+                    <ContentImage src={image} alt={industry.name} fill className="object-cover" sizes="(max-width: 768px) 50vw, 33vw" curvy={false} />
                   ) : (
                     <div className="absolute inset-0 bg-[var(--color-secondary-muted)]" />
                   )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/25 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/25 to-transparent" />
                   <div className="relative z-10 flex w-full flex-col items-center px-3 py-5 text-center">
                     <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/20 text-white">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <p className="mt-3 text-[15px] font-semibold text-white">{industry.name}</p>
+                    <p className="mt-3 text-[18px] font-semibold text-white">{industry.name}</p>
                   </div>
                 </div>
               );
             })}
-          </div>
+          </CardsCarousel>
         </Container>
       </section>
     );
@@ -268,37 +276,19 @@ export function IndustriesSection({
           <SectionHeading
             align="center"
             eyebrow="Industries Served"
-            title="Cross-sector experience grounded in real operational context"
-            description="We tailor our work to each industry's reporting expectations, compliance pressure points, and internal control realities."
+            title="Who we work with"
+            description="Businesses we support across different sectors."
           />
         </ScrollReveal>
-        <div className="mt-12 grid auto-rows-fr gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {industries.map((industry) => {
-            const Icon = getIndustryIcon(industry);
-            const image = industryCardImage(industry);
-            return (
-              <article
-                key={industry.id ?? industry.name}
-                className={`relative flex h-full min-h-[280px] flex-col overflow-hidden ${ds.card} p-0`}
-              >
-                {image ? (
-                  <ContentImage src={image} alt={industry.name} fill className="object-cover" sizes="(max-width: 1024px) 50vw, 33vw" curvy={false} />
-                ) : (
-                  <div className="absolute inset-0 bg-[var(--color-secondary-muted)]" />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/40 to-slate-950/10" />
-                <div className="relative z-10 flex h-full flex-col p-6">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/20 text-white">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="mt-5 text-[22px] font-bold text-white">{industry.name}</h3>
-                  <p className="mt-2 text-[15px] leading-6 text-white/85">{industry.summary}</p>
-                  <p className="mt-auto pt-3 text-[15px] leading-6 text-white/70">{industry.examples}</p>
-                </div>
-              </article>
-            );
-          })}
-        </div>
+        <IndustryCards
+          cards={industries.map((industry, index) => ({
+            id: industry.id ?? `${industry.name}-${index}`,
+            name: industry.name,
+            summary: industry.summary,
+            examples: industry.examples,
+            image: industryCardImage(industry),
+          }))}
+        />
       </Container>
     </section>
   );
@@ -313,8 +303,8 @@ export function ProcessSection({ steps }: { steps: ProcessStepData[] }) {
             <SectionHeading
               align="center"
               eyebrow="Our Process"
-              title="Delivering Excellence, Every Time"
-              description="A transparent, milestone-led workflow from discovery through reporting."
+              title="How we work"
+              description="A simple process from start to finish."
             />
           </ScrollReveal>
           <ProcessSteps steps={steps} />
@@ -336,8 +326,8 @@ export function WhyChooseUsSection({
           <ScrollReveal variant="slide-left" delay={200}>
             <SectionHeading
               eyebrow="Why Choose Us"
-              title="Value-added services tailored to your needs"
-              description="Clients choose HBK & Associates for independent thinking, clear communication, and recommendations that can be acted on without delay."
+              title="Why work with us"
+              description="Clear work, clear advice, and practical next steps."
             />
           </ScrollReveal>
           <ul className="mt-8 space-y-4">
@@ -388,8 +378,8 @@ export function TeamSection({ members }: { members: TeamMemberData[] }) {
           <SectionHeading
             align="center"
             eyebrow="Team"
-            title="The people behind HBK & Associates"
-            description="Our partners and managers bring audit, tax, and advisory experience across Nepal’s key industries."
+            title="Our team"
+            description="The people who work on your files."
           />
         </ScrollReveal>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -436,8 +426,8 @@ export function TestimonialsSection({
         <ScrollReveal variant="fade-up" delay={200}>
           <SectionHeading
             eyebrow="Client Feedback"
-            title="Trusted by Businesses Like Yours"
-            description="Our clients value direct communication, structured execution, and recommendations that support better governance and reporting decisions."
+            title="What clients say"
+            description="Feedback from the people we work with."
           />
         </ScrollReveal>
         <TestimonialsCarousel testimonials={testimonials} />
@@ -463,8 +453,8 @@ export function ContactSection({ contact }: { contact: ContactInfoData }) {
       <div className="max-w-3xl">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/80">Contact Information</p>
         <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">{contact.officeTitle}</h2>
-        <p className="mt-4 text-[17px] leading-7 text-white/80">
-          Reach our team directly for audit, tax, or advisory support.
+        <p className="mt-4 text-[16px] leading-[1.5] text-white/80">
+          Call or email us.
         </p>
       </div>
       <div className="mt-8 space-y-6 text-[15px] leading-7 text-white/80">
@@ -526,8 +516,8 @@ export function ContactInquirySection({
             <SectionHeading
               align="center"
               eyebrow="Contact Us"
-              title="Start a Conversation With Our Team"
-              description="Call, email, or send a consultation request. We will follow up with the right audit, tax, or advisory support for your organization."
+              title="Get in touch"
+              description="Call, email, or send a message."
             />
           </ScrollReveal>
           <div className="mt-12 grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
@@ -557,7 +547,7 @@ export function LocationMapSection({ contact }: { contact: ContactInfoData }) {
           <SectionHeading
             align="center"
             eyebrow="Our Location"
-            title="Visit Our Office"
+            title="Our office"
             description={contact.address}
           />
         </ScrollReveal>

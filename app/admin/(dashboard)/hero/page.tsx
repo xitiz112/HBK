@@ -39,9 +39,6 @@ export default async function AdminHeroPage({
             <form action={saveHeroContent} className="grid min-w-0 gap-4 sm:grid-cols-2">
               <AdminCsrfField token={csrfToken} />
               <div className="sm:col-span-2">
-                <AdminInput label="Eyebrow" name="eyebrow" defaultValue={data.eyebrow} />
-              </div>
-              <div className="sm:col-span-2">
                 <AdminInput label="Main title" name="title" defaultValue={data.title} />
               </div>
               <div className="sm:col-span-2">
@@ -63,7 +60,6 @@ export default async function AdminHeroPage({
         list={
           <AdminSection title="Current hero">
             <div className="space-y-3 text-sm">
-              <p className="text-xs font-semibold uppercase tracking-wider text-[var(--color-secondary)]">{data.eyebrow}</p>
               <h3 className="text-lg font-bold text-slate-900">{data.title}</h3>
               <p className="leading-6 text-slate-600">{data.subtitle}</p>
               <p className="text-slate-500">{data.primaryCtaText} → {data.primaryCtaHref}</p>

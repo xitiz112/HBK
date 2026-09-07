@@ -35,7 +35,6 @@ export const siteSettingsSchema = z.object({
 });
 
 export const heroSchema = z.object({
-  eyebrow: z.string().trim().min(2),
   title: z.string().trim().min(10),
   subtitle: z.string().trim().min(20),
   primaryCtaText: z.string().trim().min(2),

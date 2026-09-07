@@ -105,14 +105,6 @@ export async function SiteFooter({ contact }: { contact: ContactInfoData }) {
         <p>
           &copy; {new Date().getFullYear()} {settings.siteName}. All rights reserved.
         </p>
-        <div className="flex gap-4">
-          <Link href="/contact" className="hover:text-slate-300">
-            Privacy Policy
-          </Link>
-          <Link href="/contact" className="hover:text-slate-300">
-            Terms of Service
-          </Link>
-        </div>
       </Container>
     </footer>
   );

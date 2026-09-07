@@ -14,8 +14,8 @@ import {
   X,
 } from "lucide-react";
 
+import { CardsCarousel } from "@/components/cards-carousel";
 import { ContentImage } from "@/components/content-image";
-import ScrollReveal from "@/components/scroll-reveal";
 
 type IconComponent = typeof ShieldCheck;
 
@@ -40,18 +40,24 @@ export function ServiceCards({ cards }: { cards: ServiceCardModel[] }) {
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <div className="mt-12 grid gap-x-5 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-      {cards.map((card, index) => (
-        <ScrollReveal key={card.id} variant="fade-up" delay={200 + index * 120}>
-          <ServiceCard
-            card={card}
-            open={openId === card.id}
-            onOpen={() => setOpenId(card.id)}
-            onClose={() => setOpenId((current) => (current === card.id ? null : current))}
-          />
-        </ScrollReveal>
+    <CardsCarousel
+      ariaLabel="Services"
+      prevLabel="Previous services"
+      nextLabel="Next services"
+      className="mt-12"
+      clipClassName="pb-12 lg:pb-0"
+      onNavigate={() => setOpenId(null)}
+    >
+      {cards.map((card) => (
+        <ServiceCard
+          key={card.id}
+          card={card}
+          open={openId === card.id}
+          onOpen={() => setOpenId(card.id)}
+          onClose={() => setOpenId((current) => (current === card.id ? null : current))}
+        />
       ))}
-    </div>
+    </CardsCarousel>
   );
 }
 
@@ -78,7 +84,7 @@ function ServiceCard({
   }, [open, onClose]);
 
   return (
-    <div className="group relative h-[300px] lg:[perspective:1000px]">
+    <div className="group relative h-[300px] w-full lg:[perspective:1000px]">
       <div className="relative h-[300px] w-full lg:transition-transform lg:duration-500 lg:[transform-style:preserve-3d] lg:group-hover:[transform:rotateY(180deg)]">
         <div className="absolute inset-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-900 shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)] lg:[backface-visibility:hidden]">
           {card.image ? (

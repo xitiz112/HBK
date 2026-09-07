@@ -5,13 +5,13 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 
+import { CardsCarousel } from "@/components/cards-carousel";
 import LiquidButton from "@/components/liquid-button";
 import { mediaSrc } from "@/lib/media";
 import {
   Container,
   CtaBanner,
   ds,
-  StatsBand,
 } from "@/components/design-system";
 import ScrollReveal from "@/components/scroll-reveal";
 import {
@@ -26,7 +26,6 @@ import {
 } from "@/components/site";
 import type {
   AboutContentData,
-  CompanyStatData,
   ContactInfoData,
   HeroContentData,
   IndustryData,
@@ -61,6 +60,9 @@ const blogPosts = [
 
 function HomeHero({ hero }: { hero: HeroContentData }) {
   const background = mediaSrc(hero.image) || "/images/hero-office.png";
+  const titleWords = hero.title.trim().split(/\s+/).filter(Boolean);
+  const lastWord = titleWords.at(-1) ?? "";
+  const leadingWords = titleWords.slice(0, -1).join(" ");
 
   return (
     <section
@@ -76,12 +78,12 @@ function HomeHero({ hero }: { hero: HeroContentData }) {
           />
           <ScrollReveal variant="fade-up" threshold={0} delay={0} duration={650}>
             <h1 className="text-[40px] font-bold leading-[1.08] tracking-tight text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.85),0_2px_12px_rgba(0,0,0,0.7)] sm:text-[52px]">
-              Building Trust Through{" "}
-              <span className="text-[var(--color-accent)]">Professional Excellence</span>
+              {leadingWords ? `${leadingWords} ` : null}
+              {lastWord ? <span className="text-[var(--color-primary)]">{lastWord}</span> : null}
             </h1>
           </ScrollReveal>
           <ScrollReveal variant="fade-up" threshold={0} delay={220} duration={650}>
-            <p className="mx-auto mt-5 max-w-2xl text-[17px] leading-7 text-white">{hero.subtitle}</p>
+            <p className="mx-auto mt-5 max-w-2xl text-[17px] leading-[28px] text-white">{hero.subtitle}</p>
           </ScrollReveal>
           <ScrollReveal variant="fade-up" threshold={0} delay={420} duration={650}>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
@@ -107,44 +109,46 @@ function BlogSection() {
         <ScrollReveal variant="fade-up" delay={200}>
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className={ds.eyebrow}>Insights</p>
-              <h2 className={`mt-3 ${ds.h2}`}>Stay Updated with Latest Insights</h2>
+              <p className={ds.eyebrow}>Blog</p>
+              <h2 className={`mt-3 ${ds.h2}`}>Blog</h2>
             </div>
             <Link href="/contact" className={`${ds.link} hover:underline`}>
               View All
             </Link>
           </div>
         </ScrollReveal>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {blogPosts.map((post, index) => (
-            <ScrollReveal key={post.title} variant="fade-up" delay={200 + index * 160}>
-              <article className={`overflow-hidden ${ds.card}`}>
-                <div className="relative h-44 overflow-hidden">
-                  <Image
-                    src={post.image}
-                    alt={post.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                </div>
-                <div className="p-5">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-secondary)]">
-                    {post.category}
-                  </p>
-                  <h3 className="mt-2 text-lg font-bold leading-snug text-slate-900">
-                    {post.title}
-                  </h3>
-                  <p className={`mt-2 ${ds.bodySm}`}>{post.excerpt}</p>
-                  <Link href="/contact" className={`mt-4 ${ds.link}`}>
-                    Read More
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                </div>
-              </article>
-            </ScrollReveal>
+        <CardsCarousel
+          ariaLabel="Blog"
+          prevLabel="Previous posts"
+          nextLabel="Next posts"
+        >
+          {blogPosts.map((post) => (
+            <article key={post.title} className={`flex h-full flex-col overflow-hidden ${ds.card}`}>
+              <div className="relative h-44 overflow-hidden">
+                <Image
+                  src={post.image}
+                  alt={post.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+              </div>
+              <div className="flex flex-1 flex-col p-5">
+                <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-secondary)]">
+                  {post.category}
+                </p>
+                <h3 className="mt-2 text-lg font-bold leading-snug text-slate-900">
+                  {post.title}
+                </h3>
+                <p className={`mt-2 ${ds.bodySm}`}>{post.excerpt}</p>
+                <Link href="/contact" className={`mt-4 ${ds.link}`}>
+                  Read More
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            </article>
           ))}
-        </div>
+        </CardsCarousel>
       </Container>
     </section>
   );
@@ -152,7 +156,6 @@ function BlogSection() {
 
 type HomePageProps = {
   hero: HeroContentData;
-  stats: CompanyStatData[];
   services: ServiceData[];
   industries: IndustryData[];
   about: AboutContentData;
@@ -167,7 +170,6 @@ export function ReferenceHomePage(props: HomePageProps) {
     <main className="bg-background">
       <SiteHeader />
       <HomeHero hero={props.hero} />
-      <StatsBand stats={props.stats} delay={1450} />
       <ServicesSection services={props.services} compact />
       <IndustriesSection industries={props.industries} variant="tiles" />
       <AboutPreview about={props.about} />

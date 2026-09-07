@@ -12,9 +12,9 @@ export function ContactForm({
   return (
     <form action={submitContactForm} className={`${ds.card} p-6 sm:p-8`}>
       <div>
-        <p className={ds.eyebrow}>Request A Consultation</p>
+        <p className={ds.eyebrow}>Contact form</p>
         <h3 className="mt-3 text-xl font-bold text-slate-900 sm:text-2xl">
-          Tell us what support you need
+          Send a message
         </h3>
       </div>
       <input type="hidden" name="returnTo" value={returnTo} />

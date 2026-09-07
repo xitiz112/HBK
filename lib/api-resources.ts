@@ -174,7 +174,11 @@ export const adminResources: Record<string, AdminResource> = {
       return prisma.heroContent.upsert({
         where: { id: "hero" },
         update: payload as Prisma.HeroContentUpdateInput,
-        create: { id: "hero", ...(payload as Prisma.HeroContentCreateInput) },
+        create: {
+          id: "hero",
+          eyebrow: "Trusted Audit, Tax & Accounting",
+          ...(payload as Prisma.HeroContentCreateInput),
+        },
       });
     },
   },

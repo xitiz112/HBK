@@ -25,7 +25,6 @@ export const defaultSiteSettings: SiteSettingsData = {
 };
 
 export type HeroContentData = {
-  eyebrow: string;
   title: string;
   subtitle: string;
   primaryCtaText: string;
@@ -104,7 +103,6 @@ export type TestimonialData = {
 };
 
 export const defaultHeroContent: HeroContentData = {
-  eyebrow: "Trusted Audit, Tax & Accounting",
   title: "Clarity, compliance, and confidence for growing businesses.",
   subtitle:
     "Established in 2058 B.S. by Hari Bahadur Karki, HBK & Associates provides auditing, tax consulting, banking-purpose financial reports, and accounting outsourcing from New Baneshwor, Kathmandu.",
@@ -396,12 +394,11 @@ export async function getTestimonials(): Promise<TestimonialData[]> {
 }
 
 export async function getHomePageData() {
-  const [hero, about, contact, stats, services, industries, processSteps, differentiators, testimonials] =
+  const [hero, about, contact, services, industries, processSteps, differentiators, testimonials] =
     await Promise.all([
       getHeroContent(),
       getAboutContent(),
       getContactInfo(),
-      getCompanyStats(),
       getServices(),
       getIndustries(),
       getProcessSteps(),
@@ -413,7 +410,6 @@ export async function getHomePageData() {
     hero,
     about,
     contact,
-    stats,
     services,
     industries,
     processSteps,

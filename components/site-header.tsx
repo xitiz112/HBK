@@ -63,6 +63,7 @@ export default function SiteHeader({
     logo: null,
     showSiteName: true,
   },
+  overlapHero = false,
 }: {
   settings?: {
     siteName: string;
@@ -70,6 +71,7 @@ export default function SiteHeader({
     logo?: string | null;
     showSiteName: boolean;
   };
+  overlapHero?: boolean;
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [visible, setVisible] = useState(true);
@@ -120,7 +122,9 @@ export default function SiteHeader({
 
   return (
     <>
-      <div className="h-24 sm:h-[104px]" aria-hidden />
+      {overlapHero ? null : (
+        <div className="h-[89px] sm:h-[97px]" aria-hidden />
+      )}
     <header
       className={[
         "fixed inset-x-0 top-0 z-50",

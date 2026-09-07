@@ -168,7 +168,6 @@ export async function saveHeroContent(formData: FormData) {
   await guard(formData, PATH.hero);
 
   const parsed = heroSchema.safeParse({
-    eyebrow: formData.get("eyebrow"),
     title: formData.get("title"),
     subtitle: formData.get("subtitle"),
     primaryCtaText: formData.get("primaryCtaText"),
@@ -188,7 +187,11 @@ export async function saveHeroContent(formData: FormData) {
     await prisma.heroContent.upsert({
       where: { id: "hero" },
       update: data,
-      create: { id: "hero", ...data },
+      create: {
+        id: "hero",
+        eyebrow: "Trusted Audit, Tax & Accounting",
+        ...data,
+      },
     });
   });
 }

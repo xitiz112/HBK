@@ -42,7 +42,7 @@ export const ds = {
   h1: "text-4xl font-bold leading-[1.08] tracking-tight text-slate-900 sm:text-5xl",
   h2: "text-3xl font-bold text-slate-900 sm:text-4xl",
   h3: "text-xl font-bold text-slate-900",
-  body: "text-[17px] leading-7 text-slate-600",
+  body: "text-[16px] leading-[1.5] text-slate-600",
   bodySm: "text-base leading-6 text-slate-600",
   btnPrimary:
     "group relative overflow-hidden inline-flex items-center gap-2 rounded-lg border border-[var(--color-primary)] bg-white px-6 py-3 text-[15px] font-semibold text-[var(--color-primary)]",
@@ -80,11 +80,13 @@ export function SectionHeading({
   eyebrow,
   title,
   description,
+  descriptionClassName = "text-[16px] leading-[1.5] text-slate-600",
   align = "left",
 }: {
   eyebrow: string;
   title: string;
   description?: string;
+  descriptionClassName?: string;
   align?: "left" | "center";
 }) {
   const wrap = align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-3xl";
@@ -93,7 +95,7 @@ export function SectionHeading({
       <Eyebrow>{eyebrow}</Eyebrow>
       <h2 className={`mt-3 ${ds.h2}`}>{title}</h2>
       {description ? (
-        <p className="mt-4 text-[17px] leading-[1.6] text-slate-600">
+        <p className={`mt-4 ${descriptionClassName}`}>
           {description}
         </p>
       ) : null}
@@ -148,9 +150,11 @@ export function ButtonLink({
 
 export function PageHero({ title }: { title: string }) {
   return (
-    <section className="border-b border-slate-200 bg-[var(--color-accent-muted)] py-10 sm:py-12">
+    <section className="bg-[#2663ec] py-10 sm:py-12">
       <Container>
-        <h1 className={`${ds.h1} text-center`}>{title}</h1>
+        <h1 className="text-center text-4xl font-bold leading-[1.08] tracking-tight text-[#ffffff] sm:text-5xl">
+          {title}
+        </h1>
       </Container>
     </section>
   );
@@ -189,8 +193,8 @@ export function StatsBand({
 }
 
 export function CtaBanner({
-  title = "Ready to Strengthen Your Financial Foundation?",
-  description = "Consult with our experts today and discover how HBK can support your next audit, tax, or advisory engagement.",
+  title = "Need help?",
+  description = "Send us a message and we will get back to you.",
   buttonLabel = "Get in Touch",
   buttonHref = "/contact",
 }: {
@@ -206,7 +210,7 @@ export function CtaBanner({
           <ScrollReveal variant="slide-left" delay={200}>
             <div>
               <h2 className="text-2xl font-bold text-white sm:text-3xl">{title}</h2>
-              <p className="mt-2 max-w-xl text-[15px] leading-6 text-[var(--color-secondary-soft)]">{description}</p>
+              <p className="mt-2 max-w-xl text-[16px] leading-[1.5] text-[var(--color-secondary-soft)]">{description}</p>
             </div>
           </ScrollReveal>
           <ScrollReveal variant="slide-right" delay={360}>
