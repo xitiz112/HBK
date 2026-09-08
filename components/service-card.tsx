@@ -108,7 +108,7 @@ function ServiceCard({
           </div>
         </div>
 
-        <div className="absolute inset-0 hidden flex-col items-center justify-center rounded-xl bg-[var(--color-primary)] p-6 pb-10 text-center lg:flex lg:[backface-visibility:hidden] lg:[transform:rotateY(180deg)]">
+        <div className="pointer-events-none absolute inset-0 hidden flex-col items-center justify-center rounded-xl bg-[var(--color-primary)] p-6 pb-10 text-center lg:flex lg:group-hover:pointer-events-auto lg:[backface-visibility:hidden] lg:[transform:rotateY(180deg)]">
           {card.image ? (
             <span className="relative block h-11 w-11 overflow-hidden rounded-lg">
               <ContentImage

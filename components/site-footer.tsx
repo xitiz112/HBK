@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Building2, Mail, Phone } from "lucide-react";
 
-import { Container, ds, NAV_LINKS, SERVICE_DROPDOWN } from "@/components/design-system";
+import { Container, ds, NAV_LINKS } from "@/components/design-system";
 import { SiteBrand } from "@/components/site-brand";
-import { getSiteSettings } from "@/lib/content";
+import { getServices, getSiteSettings } from "@/lib/content";
 import type { ContactInfoData } from "@/lib/content";
 
 function footerAddressLines(address: string) {
@@ -33,7 +33,7 @@ function footerAddressLines(address: string) {
 }
 
 export async function SiteFooter({ contact }: { contact: ContactInfoData }) {
-  const settings = await getSiteSettings();
+  const [settings, services] = await Promise.all([getSiteSettings(), getServices()]);
 
   return (
     <footer className="bg-slate-950 py-14 text-[15px] text-slate-300">
@@ -63,10 +63,10 @@ export async function SiteFooter({ contact }: { contact: ContactInfoData }) {
         <div>
           <p className={ds.footerLabel}>Services</p>
           <ul className="mt-4 space-y-2.5">
-            {SERVICE_DROPDOWN.map((item) => (
-              <li key={item.label}>
-                <Link href={item.href} className="transition hover:text-white">
-                  {item.label}
+            {services.map((service) => (
+              <li key={service.id ?? service.title}>
+                <Link href="/services" className="transition hover:text-white">
+                  {service.title}
                 </Link>
               </li>
             ))}

@@ -210,6 +210,14 @@ export function ServicesSection({
             icon: service.icon,
           }))}
         />
+        {compact ? (
+          <div className="relative z-20 mt-10 flex justify-center">
+            <ButtonLink href="/services" aria-label="View all services">
+              View All
+              <ArrowRight className="h-4 w-4" />
+            </ButtonLink>
+          </div>
+        ) : null}
       </Container>
     </section>
   );
@@ -264,6 +272,12 @@ export function IndustriesSection({
               );
             })}
           </CardsCarousel>
+          <div className="relative z-20 mt-10 flex justify-center">
+            <ButtonLink href="/industries" aria-label="View all industries">
+              View All
+              <ArrowRight className="h-4 w-4" />
+            </ButtonLink>
+          </div>
         </Container>
       </section>
     );
@@ -425,6 +439,7 @@ export function TestimonialsSection({
       <Container>
         <ScrollReveal variant="fade-up" delay={200}>
           <SectionHeading
+            align="center"
             eyebrow="Client Feedback"
             title="What clients say"
             description="Feedback from the people we work with."
@@ -453,7 +468,7 @@ export function ContactSection({ contact }: { contact: ContactInfoData }) {
       <div className="max-w-3xl">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/80">Contact Information</p>
         <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">{contact.officeTitle}</h2>
-        <p className="mt-4 text-[16px] leading-[1.5] text-white/80">
+        <p className="mt-3 text-[16px] leading-[1.5] text-white/80">
           Call or email us.
         </p>
       </div>

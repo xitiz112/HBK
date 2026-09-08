@@ -2,17 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 import FloatingContact from "@/components/floating-contact";
+import { ContactModalHost, openContactModal } from "@/components/contact-modal";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { SiteBrand } from "@/components/site-brand";
-import {
-  ButtonLink,
-  INDUSTRY_DROPDOWN,
-  NAV_LINKS,
-  SERVICE_DROPDOWN,
-} from "@/components/design-system";
+import { ButtonLink, NAV_LINKS, type MenuLink } from "@/components/design-system";
 
 function NavDropdown({
   items,
@@ -22,7 +18,7 @@ function NavDropdown({
   return (
     <div
       className={[
-        "absolute left-1/2 top-full z-50 w-52 -translate-x-1/2 pt-3",
+        "absolute left-1/2 top-full z-50 w-64 -translate-x-1/2 pt-3",
         "pointer-events-none -translate-y-2 opacity-0",
         "transition-all duration-200 ease-out",
         "group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100",
@@ -31,11 +27,10 @@ function NavDropdown({
       <div className="overflow-hidden rounded-xl border border-slate-200 bg-white py-1.5 shadow-[0px_8px_24px_rgba(15,23,42,0.12)]">
         {items.map((item) => (
           <Link
-            key={item.label}
+            key={`${item.href}-${item.label}`}
             href={item.href}
-            className="flex items-center gap-2 px-4 py-2.5 text-[15px] font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-[var(--color-primary)]"
+            className="block px-4 py-2.5 text-[15px] font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-[var(--color-primary)]"
           >
-            <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[var(--color-primary)]" />
             {item.label}
           </Link>
         ))}
@@ -64,6 +59,8 @@ export default function SiteHeader({
     showSiteName: true,
   },
   overlapHero = false,
+  serviceItems = [],
+  industryItems = [],
 }: {
   settings?: {
     siteName: string;
@@ -72,6 +69,8 @@ export default function SiteHeader({
     showSiteName: boolean;
   };
   overlapHero?: boolean;
+  serviceItems?: MenuLink[];
+  industryItems?: MenuLink[];
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [visible, setVisible] = useState(true);
@@ -155,7 +154,7 @@ export default function SiteHeader({
                     {item.label}
                     <Chevron className="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" />
                   </Link>
-                  <NavDropdown items={SERVICE_DROPDOWN} />
+                  {serviceItems.length ? <NavDropdown items={serviceItems} /> : null}
                 </div>
               );
             }
@@ -166,8 +165,20 @@ export default function SiteHeader({
                     {item.label}
                     <Chevron className="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" />
                   </Link>
-                  <NavDropdown items={INDUSTRY_DROPDOWN} />
+                  {industryItems.length ? <NavDropdown items={industryItems} /> : null}
                 </div>
+              );
+            }
+            if (item.href === "/contact") {
+              return (
+                <button
+                  key={item.href}
+                  type="button"
+                  onClick={openContactModal}
+                  className="cursor-pointer px-3 py-2 text-[15px] font-medium text-slate-600 transition hover:text-[var(--color-primary)]"
+                >
+                  {item.label}
+                </button>
               );
             }
             return (
@@ -185,7 +196,7 @@ export default function SiteHeader({
         <div className="flex items-center gap-2">
           <LanguageSwitcher className="hidden sm:inline-flex" />
           <span className="hidden xl:inline-flex">
-            <ButtonLink href="/contact" variant="solid" className="px-5 py-2.5">
+            <ButtonLink variant="solid" className="px-5 py-2.5" onClick={openContactModal}>
               Contact Us
             </ButtonLink>
           </span>
@@ -213,7 +224,7 @@ export default function SiteHeader({
             {NAV_LINKS.map((item) => {
               if (item.href === "/services" || item.href === "/industries") {
                 const key = item.href === "/services" ? "services" : "industries";
-                const items = key === "services" ? SERVICE_DROPDOWN : INDUSTRY_DROPDOWN;
+                const items = key === "services" ? serviceItems : industryItems;
                 const expanded = openSection === key;
                 return (
                   <li key={item.href}>
@@ -253,6 +264,23 @@ export default function SiteHeader({
                 );
               }
 
+              if (item.href === "/contact") {
+                return (
+                  <li key={item.href}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        closeMenu();
+                        openContactModal();
+                      }}
+                      className="block w-full cursor-pointer rounded-lg px-3 py-3 text-left text-[15px] font-semibold text-slate-800"
+                    >
+                      {item.label}
+                    </button>
+                  </li>
+                );
+              }
+
               return (
                 <li key={item.href}>
                   <Link
@@ -270,6 +298,7 @@ export default function SiteHeader({
       </div>
     </header>
     <FloatingContact />
+    <ContactModalHost />
     </>
   );
 }

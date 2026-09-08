@@ -38,8 +38,15 @@ export async function submitContactForm(formData: FormData) {
     message: formData.get("message"),
   });
 
+  const fromModal = String(formData.get("fromModal") ?? "") === "1";
+  const params = new URLSearchParams({
+    status: parsed.success ? "success" : "invalid",
+  });
+  if (fromModal) params.set("contact", "1");
+  const next = `${returnTo}?${params.toString()}`;
+
   if (!parsed.success) {
-    redirect(`${returnTo}?status=invalid`);
+    redirect(next);
   }
 
   await prisma.contactSubmission.create({
@@ -54,5 +61,5 @@ export async function submitContactForm(formData: FormData) {
   });
 
   revalidatePath("/admin");
-  redirect(`${returnTo}?status=success`);
+  redirect(next);
 }

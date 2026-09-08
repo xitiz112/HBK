@@ -2,6 +2,7 @@
 
 import {
   Children,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -47,6 +48,8 @@ type CardsCarouselProps = {
   onNavigate?: () => void;
   /** When true, show arrows whenever there is more than one card (testimonials). */
   loopWhenMultiple?: boolean;
+  autoPlay?: boolean;
+  autoPlayMs?: number;
 };
 
 export function CardsCarousel({
@@ -60,6 +63,8 @@ export function CardsCarousel({
   getDotLabel,
   onNavigate,
   loopWhenMultiple = false,
+  autoPlay = true,
+  autoPlayMs = 4500,
 }: CardsCarouselProps) {
   const items = Children.toArray(children);
   const count = items.length;
@@ -70,7 +75,9 @@ export function CardsCarousel({
   const [animate, setAnimate] = useState(true);
   const [step, setStep] = useState(0);
   const [pageSize, setPageSize] = useState(perPage);
+  const [paused, setPaused] = useState(false);
   const locked = useRef(false);
+  const onNavigateRef = useRef(onNavigate);
   const clipRef = useRef<HTMLDivElement>(null);
   const slides = showNav && count > 0 ? [...items, ...items] : items;
   const gap = 20;
@@ -103,6 +110,9 @@ export function CardsCarousel({
     }
     locked.current = true;
     onNavigate?.();
+    window.setTimeout(() => {
+      locked.current = false;
+    }, 550);
 
     if (direction < 0 && offset === 0) {
       setAnimate(false);
@@ -120,6 +130,34 @@ export function CardsCarousel({
     setOffset((current) => current + direction);
   };
 
+  useLayoutEffect(() => {
+    onNavigateRef.current = onNavigate;
+  }, [onNavigate]);
+
+  useEffect(() => {
+    if (!showNav || !autoPlay || paused) {
+      return;
+    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const id = window.setInterval(() => {
+      if (document.hidden || locked.current) {
+        return;
+      }
+      locked.current = true;
+      onNavigateRef.current?.();
+      setAnimate(true);
+      setOffset((current) => current + 1);
+      window.setTimeout(() => {
+        locked.current = false;
+      }, 550);
+    }, autoPlayMs);
+
+    return () => window.clearInterval(id);
+  }, [showNav, autoPlay, paused, autoPlayMs]);
+
   const finishSlide = (event: TransitionEvent<HTMLDivElement>) => {
     if (event.target !== event.currentTarget) {
       return;
@@ -136,7 +174,15 @@ export function CardsCarousel({
   }
 
   return (
-    <div className={className} role="region" aria-roledescription="carousel" aria-label={ariaLabel}>
+    <div
+      className={className}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label={ariaLabel}
+      data-autoplay={showNav && autoPlay && !paused ? "true" : "false"}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       <div className="flex items-center gap-3">
         {showNav ? (
           <button

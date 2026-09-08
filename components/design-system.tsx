@@ -14,21 +14,10 @@ export const NAV_LINKS = [
   { href: "/team", label: "Our Team" },
 ] as const;
 
-export const SERVICE_DROPDOWN = [
-  { label: "Audit & Assurance", href: "/services" },
-  { label: "Tax Planning", href: "/services" },
-  { label: "Business Advisory", href: "/services" },
-  { label: "Risk & Controls", href: "/services" },
-  { label: "Financial Reporting", href: "/services" },
-] as const;
-
-export const INDUSTRY_DROPDOWN = [
-  { label: "Manufacturing", href: "/industries" },
-  { label: "Real Estate", href: "/industries" },
-  { label: "Healthcare", href: "/industries" },
-  { label: "Financial Services", href: "/industries" },
-  { label: "Government & NPO", href: "/industries" },
-] as const;
+export type MenuLink = {
+  label: string;
+  href: string;
+};
 
 /** Shared class tokens aligned with the reference UI */
 export const ds = {
@@ -95,7 +84,7 @@ export function SectionHeading({
       <Eyebrow>{eyebrow}</Eyebrow>
       <h2 className={`mt-3 ${ds.h2}`}>{title}</h2>
       {description ? (
-        <p className={`mt-4 ${descriptionClassName}`}>
+        <p className={`mt-3 ${descriptionClassName}`}>
           {description}
         </p>
       ) : null}
@@ -119,14 +108,18 @@ const hoverTextClass = {
 
 export function ButtonLink({
   href,
+  onClick,
   children,
   variant = "primary",
   className = "",
+  "aria-label": ariaLabel,
 }: {
-  href: string;
+  href?: string;
+  onClick?: () => void;
   children: React.ReactNode;
   variant?: "primary" | "secondary" | "solid" | "inverse";
   className?: string;
+  "aria-label"?: string;
 }) {
   const styles = {
     primary: ds.btnPrimary,
@@ -134,17 +127,35 @@ export function ButtonLink({
     solid: ds.btnSolid,
     inverse: ds.btnInverse,
   }[variant];
-  return (
-    <Link href={href} className={`${styles} ${className}`}>
-      {/* left-to-right liquid fill */}
+  const inner = (
+    <>
       <span
-        className={`absolute inset-0 origin-left scale-x-0 transition-transform duration-[420ms] ease-out group-hover:scale-x-100 ${fillClass[variant]}`}
+        aria-hidden
+        className={`pointer-events-none absolute inset-0 origin-left scale-x-0 transition-transform duration-[420ms] ease-out group-hover:scale-x-100 ${fillClass[variant]}`}
       />
-      {/* content stays above the fill */}
       <span className={`relative z-10 inline-flex items-center gap-2 transition-colors duration-300 ${hoverTextClass[variant]}`}>
         {children}
       </span>
-    </Link>
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className={`${styles} ${className}`} aria-label={ariaLabel} onClick={onClick}>
+        {inner}
+      </Link>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      className={`${styles} ${className} cursor-pointer`}
+      aria-label={ariaLabel}
+      onClick={onClick}
+    >
+      {inner}
+    </button>
   );
 }
 
@@ -210,7 +221,7 @@ export function CtaBanner({
           <ScrollReveal variant="slide-left" delay={200}>
             <div>
               <h2 className="text-2xl font-bold text-white sm:text-3xl">{title}</h2>
-              <p className="mt-2 max-w-xl text-[16px] leading-[1.5] text-[var(--color-secondary-soft)]">{description}</p>
+              <p className="mt-1.5 max-w-xl text-[16px] leading-[1.5] text-[var(--color-secondary-soft)]">{description}</p>
             </div>
           </ScrollReveal>
           <ScrollReveal variant="slide-right" delay={360}>
