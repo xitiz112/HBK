@@ -176,8 +176,8 @@ export const adminResources: Record<string, AdminResource> = {
         update: payload as Prisma.HeroContentUpdateInput,
         create: {
           id: "hero",
-          eyebrow: "Trusted Audit, Tax & Accounting",
           ...(payload as Prisma.HeroContentCreateInput),
+          eyebrow: "Trusted Audit, Tax & Accounting",
         },
       });
     },

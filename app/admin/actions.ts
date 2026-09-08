@@ -189,8 +189,8 @@ export async function saveHeroContent(formData: FormData) {
       update: data,
       create: {
         id: "hero",
-        eyebrow: "Trusted Audit, Tax & Accounting",
         ...data,
+        eyebrow: "Trusted Audit, Tax & Accounting",
       },
     });
   });
