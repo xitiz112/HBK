@@ -47,7 +47,6 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
   }
 
   html,
@@ -107,7 +106,7 @@ iframe.skiptranslate,
 }
 
 /* iOS Safari: background-attachment:fixed breaks scrolling and layout. */
-@supports (-webkit-touch-callout: none) {
+@media (hover: none) and (pointer: coarse) {
   .bg-fixed {
     background-attachment: scroll !important;
   }
