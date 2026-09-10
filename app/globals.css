@@ -46,24 +46,52 @@
 
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  html,
+  body {
+    max-width: 100%;
   }
 
   body {
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-montserrat), var(--font-devanagari), system-ui, sans-serif;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  img,
+  video,
+  iframe {
+    max-width: 100%;
+  }
+
+  input,
+  textarea,
+  select {
+    font: inherit;
+    font-size: 16px;
+  }
+
+  button {
+    font: inherit;
+  }
+
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 
   a {
     color: inherit;
     text-decoration: none;
-  }
-
-  input,
-  textarea,
-  select,
-  button {
-    font: inherit;
   }
 }
 
@@ -72,9 +100,17 @@ iframe.goog-te-banner-frame,
 .goog-te-balloon-frame,
 .goog-te-gadget,
 body > .skiptranslate,
+iframe.skiptranslate,
 #goog-gt-tt,
 .goog-tooltip {
   display: none !important;
+}
+
+/* iOS Safari: background-attachment:fixed breaks scrolling and layout. */
+@supports (-webkit-touch-callout: none) {
+  .bg-fixed {
+    background-attachment: scroll !important;
+  }
 }
 
 #google_translate_element {

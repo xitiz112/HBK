@@ -21,7 +21,7 @@ export type MenuLink = {
 
 /** Shared class tokens aligned with the reference UI */
 export const ds = {
-  container: "mx-auto w-full max-w-[1180px] px-5 lg:px-8",
+  container: "mx-auto w-full max-w-[1180px] px-4 sm:px-5 lg:px-8",
   section: "py-16 sm:py-20",
   sectionMuted: "bg-white py-16 sm:py-20",
   sectionBrand: "bg-[var(--color-accent-muted)] py-16 sm:py-20",
@@ -43,7 +43,7 @@ export const ds = {
     "group relative overflow-hidden inline-flex items-center gap-2 rounded-lg border border-white bg-transparent px-6 py-3 text-[15px] font-semibold text-white",
   link: "inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-primary)] hover:underline",
   input:
-    "mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]",
+    "mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 text-base outline-none transition focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]",
   iconBox:
     "flex h-11 w-11 items-center justify-center rounded-lg bg-[var(--color-secondary-muted)] text-[var(--color-primary)]",
   iconCircle:
@@ -163,7 +163,7 @@ export function PageHero({ title }: { title: string }) {
   return (
     <section className="bg-[#2663ec] py-10 sm:py-12">
       <Container>
-        <h1 className="text-center text-4xl font-bold leading-[1.08] tracking-tight text-[#ffffff] sm:text-5xl">
+        <h1 className="break-words text-center text-3xl font-bold leading-[1.12] tracking-tight text-[#ffffff] sm:text-4xl md:text-5xl">
           {title}
         </h1>
       </Container>
@@ -217,7 +217,7 @@ export function CtaBanner({
   return (
     <section className="py-10">
       <Container>
-        <div className="flex flex-col items-start justify-between gap-6 rounded-2xl bg-[var(--color-primary)] px-8 py-10 sm:flex-row sm:items-center sm:px-12">
+        <div className="flex flex-col items-start justify-between gap-6 rounded-2xl bg-[var(--color-primary)] px-5 py-8 sm:flex-row sm:items-center sm:px-12 sm:py-10">
           <ScrollReveal variant="slide-left" delay={200}>
             <div>
               <h2 className="text-2xl font-bold text-white sm:text-3xl">{title}</h2>

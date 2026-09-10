@@ -14,7 +14,7 @@ export function ContactForm({
   fromModal?: boolean;
 }) {
   const inputClass = fromModal
-    ? "mt-1.5 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]"
+    ? "mt-1.5 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-base outline-none transition focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]"
     : ds.input;
 
   return (
@@ -42,8 +42,8 @@ export function ContactForm({
           <StatusNotice status={status} />
         </div>
       ) : null}
-      <div className={fromModal ? "mt-3 grid grid-cols-2 gap-2.5" : "mt-5 grid gap-4 sm:grid-cols-2"}>
-        <label className="text-sm font-medium text-slate-700 col-span-2">
+      <div className={fromModal ? "mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2" : "mt-5 grid gap-4 sm:grid-cols-2"}>
+        <label className="col-span-full text-sm font-medium text-slate-700">
           Full name
           <input required name="name" className={inputClass} placeholder="Your full name" />
         </label>
@@ -61,11 +61,11 @@ export function ContactForm({
           Phone
           <input name="phone" className={inputClass} placeholder="+977-98..." />
         </label>
-        <label className="text-sm font-medium text-slate-700 col-span-2">
+        <label className="col-span-full text-sm font-medium text-slate-700">
           Company
           <input name="company" className={inputClass} placeholder="Company name" />
         </label>
-        <label className="text-sm font-medium text-slate-700 col-span-2">
+        <label className="col-span-full text-sm font-medium text-slate-700">
           Service needed
           <select name="serviceInterest" className={inputClass} defaultValue="">
             <option value="" disabled>
@@ -77,7 +77,7 @@ export function ContactForm({
             <option value="Risk & Internal Controls">Risk & Internal Controls</option>
           </select>
         </label>
-        <label className="text-sm font-medium text-slate-700 col-span-2">
+        <label className="col-span-full text-sm font-medium text-slate-700">
           Message
           <textarea
             required

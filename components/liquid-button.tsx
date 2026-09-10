@@ -28,7 +28,7 @@ export default function LiquidButton({
       href={href}
       className={[
         "group relative overflow-hidden",
-        "inline-flex items-center gap-2 rounded-lg border bg-white px-6 py-3 text-[15px] font-semibold",
+        "inline-flex w-full items-center justify-center gap-2 rounded-lg border bg-white px-6 py-3 text-[15px] font-semibold sm:w-auto",
         border[variant],
         className,
       ].join(" ")}

@@ -11,7 +11,8 @@ export default function FloatingContact() {
       aria-label="Contact Us"
       onClick={openContactModal}
       className={[
-        "fixed bottom-6 right-6 z-40 xl:hidden",
+        "fixed z-40 xl:hidden",
+        "right-[max(1.25rem,env(safe-area-inset-right))] bottom-[max(1.25rem,env(safe-area-inset-bottom))]",
         "inline-flex cursor-pointer items-center gap-2 rounded-full",
         "bg-[var(--color-primary)] px-4 py-3",
         "text-[15px] font-semibold text-white",

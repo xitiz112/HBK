@@ -85,8 +85,8 @@ function ServiceCard({
 
   return (
     <div className="group relative h-[300px] w-full lg:[perspective:1000px]">
-      <div className="relative h-[300px] w-full lg:transition-transform lg:duration-500 lg:[transform-style:preserve-3d] lg:group-hover:[transform:rotateY(180deg)]">
-        <div className="absolute inset-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-900 shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)] lg:[backface-visibility:hidden]">
+      <div className="relative h-[300px] w-full lg:transition-transform lg:duration-500 lg:[-webkit-transform-style:preserve-3d] lg:[transform-style:preserve-3d] lg:group-hover:[transform:rotateY(180deg)]">
+        <div className="absolute inset-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-900 shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)] lg:[-webkit-backface-visibility:hidden] lg:[backface-visibility:hidden]">
           {card.image ? (
             <ContentImage
               src={card.image}
@@ -108,7 +108,7 @@ function ServiceCard({
           </div>
         </div>
 
-        <div className="pointer-events-none absolute inset-0 hidden flex-col items-center justify-center rounded-xl bg-[var(--color-primary)] p-6 pb-10 text-center lg:flex lg:group-hover:pointer-events-auto lg:[backface-visibility:hidden] lg:[transform:rotateY(180deg)]">
+        <div className="pointer-events-none absolute inset-0 hidden flex-col items-center justify-center rounded-xl bg-[var(--color-primary)] p-6 pb-10 text-center lg:flex lg:group-hover:pointer-events-auto lg:[-webkit-backface-visibility:hidden] lg:[backface-visibility:hidden] lg:[transform:rotateY(180deg)]">
           {card.image ? (
             <span className="relative block h-11 w-11 overflow-hidden rounded-lg">
               <ContentImage

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Montserrat, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
 import BackToTop from "@/components/back-to-top";
@@ -20,6 +20,12 @@ const notoDevanagari = Noto_Sans_Devanagari({
 });
 
 export const dynamic = "force-dynamic";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
@@ -58,7 +64,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${montserrat.variable} ${notoDevanagari.variable} h-full antialiased`}
+      className={`${montserrat.variable} ${notoDevanagari.variable} min-h-dvh antialiased`}
     >
       <head>
         <script
@@ -66,7 +72,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: TRANSLATE_BOOTSTRAP_SCRIPT }}
         />
       </head>
-      <body className="min-h-full bg-background font-sans text-slate-900">
+      <body className="min-h-dvh overflow-x-hidden bg-background font-sans text-slate-900">
         <TranslateLoader />
         {children}
         <GoogleTranslate />

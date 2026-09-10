@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { X } from "lucide-react";
 
 import { ContactForm } from "@/components/contact-form";
+import { lockBodyScroll, unlockBodyScroll } from "@/lib/body-scroll-lock";
 
 const OPEN_EVENT = "hbk-open-contact";
 const FADE_MS = 280;
@@ -86,17 +87,13 @@ function ContactModalDialog() {
 
   useEffect(() => {
     if (!mounted) return;
-    const previousBody = document.body.style.overflow;
-    const previousHtml = document.documentElement.style.overflow;
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
+    lockBodyScroll();
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") close();
     };
     window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = previousBody;
-      document.documentElement.style.overflow = previousHtml;
+      unlockBodyScroll();
       window.removeEventListener("keydown", onKey);
     };
   }, [mounted, close]);
@@ -104,7 +101,7 @@ function ContactModalDialog() {
   if (!mounted) return null;
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-center justify-center overflow-hidden p-6 sm:p-10">
+    <div className="fixed inset-0 z-[80] flex items-end justify-center overflow-y-auto overflow-x-hidden overscroll-contain p-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] sm:items-center sm:p-10">
       <button
         type="button"
         tabIndex={-1}
@@ -118,7 +115,7 @@ function ContactModalDialog() {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className={`relative z-10 w-full max-h-full max-w-lg transition-[opacity,transform] duration-[280ms] ease-out ${
+        className={`relative z-10 my-auto w-full max-h-[min(100%,calc(100dvh-2rem))] max-w-lg overflow-y-auto overscroll-contain transition-[opacity,transform] duration-[280ms] ease-out ${
           visible ? "translate-y-0 opacity-100" : "translate-y-1.5 opacity-0"
         }`}
       >

@@ -96,7 +96,7 @@ export async function SiteFooter({ contact }: { contact: ContactInfoData }) {
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-secondary)]" />
               <div>
                 <p className="font-semibold text-white">Email</p>
-                <a href={`mailto:${contact.email}`} className="mt-0.5 block leading-6 text-slate-400 transition hover:text-white">
+                <a href={`mailto:${contact.email}`} className="mt-0.5 block break-all leading-6 text-slate-400 transition hover:text-white">
                   {contact.email}
                 </a>
               </div>

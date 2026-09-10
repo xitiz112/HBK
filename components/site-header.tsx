@@ -9,6 +9,7 @@ import { ContactModalHost, openContactModal } from "@/components/contact-modal";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { SiteBrand } from "@/components/site-brand";
 import { ButtonLink, NAV_LINKS, type MenuLink } from "@/components/design-system";
+import { lockBodyScroll, unlockBodyScroll } from "@/lib/body-scroll-lock";
 
 function NavDropdown({
   items,
@@ -76,7 +77,9 @@ export default function SiteHeader({
   const [visible, setVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [openSection, setOpenSection] = useState<"services" | "industries" | null>(null);
+  const [headerHeight, setHeaderHeight] = useState(72);
   const lastY = useRef(0);
+  const barRef = useRef<HTMLDivElement>(null);
 
   const closeMenu = () => {
     setMenuOpen(false);
@@ -108,25 +111,38 @@ export default function SiteHeader({
   }, [menuOpen]);
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
+    if (!menuOpen) return;
+    lockBodyScroll();
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") closeMenu();
     };
     window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = "";
+      unlockBodyScroll();
       window.removeEventListener("keydown", onKey);
     };
   }, [menuOpen]);
 
+  useEffect(() => {
+    const el = barRef.current;
+    if (!el || typeof ResizeObserver === "undefined") {
+      return;
+    }
+    const update = () => setHeaderHeight(el.offsetHeight);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       {overlapHero ? null : (
-        <div className="h-[89px] sm:h-[97px]" aria-hidden />
+        <div style={{ height: headerHeight }} aria-hidden />
       )}
     <header
       className={[
-        "fixed inset-x-0 top-0 z-50",
+        "fixed inset-x-0 top-0 z-50 pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]",
         "transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]",
         visible ? "translate-y-0" : "-translate-y-full",
         scrolled || menuOpen
@@ -134,8 +150,11 @@ export default function SiteHeader({
           : "border-b border-transparent bg-white/80 shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)] backdrop-blur-sm",
       ].join(" ")}
     >
-      <div className="mx-auto flex w-full items-center justify-between px-5 py-4 lg:px-8">
-        <Link href="/" className="flex items-center gap-2.5" aria-label={settings.siteName} onClick={closeMenu}>
+      <div
+        ref={barRef}
+        className="mx-auto flex w-full min-w-0 items-center justify-between gap-2 px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-5 sm:pb-4 lg:px-8"
+      >
+        <Link href="/" className="flex min-w-0 items-center gap-2.5" aria-label={settings.siteName} onClick={closeMenu}>
           <SiteBrand
             siteName={settings.siteName}
             shortName={settings.shortName}
@@ -193,8 +212,10 @@ export default function SiteHeader({
           })}
         </nav>
 
-        <div className="flex items-center gap-2">
-          <LanguageSwitcher className="hidden sm:inline-flex" />
+        <div className="flex shrink-0 items-center gap-2">
+          <span className="hidden sm:inline-flex">
+            <LanguageSwitcher />
+          </span>
           <span className="hidden xl:inline-flex">
             <ButtonLink variant="solid" className="px-5 py-2.5" onClick={openContactModal}>
               Contact Us
@@ -205,7 +226,7 @@ export default function SiteHeader({
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((open) => !open)}
-            className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-800 xl:hidden"
+            className="inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-800 xl:hidden"
           >
             {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -216,10 +237,13 @@ export default function SiteHeader({
         className={[
           "xl:hidden overflow-hidden border-t border-slate-200 bg-white",
           "transition-all duration-300 ease-out",
-          menuOpen ? "max-h-[min(80vh,720px)] opacity-100" : "max-h-0 border-t-0 opacity-0",
+          menuOpen ? "max-h-[min(80dvh,720px)] opacity-100" : "max-h-0 border-t-0 opacity-0",
         ].join(" ")}
       >
-        <nav className="mx-auto max-h-[min(80vh,720px)] w-full overflow-y-auto px-5 py-4 lg:px-8">
+        <nav className="mx-auto max-h-[min(80dvh,720px)] w-full overflow-y-auto overscroll-contain px-5 py-4 lg:px-8">
+          <div className="mb-3 sm:hidden">
+            <LanguageSwitcher />
+          </div>
           <ul className="space-y-1">
             {NAV_LINKS.map((item) => {
               if (item.href === "/services" || item.href === "/industries") {

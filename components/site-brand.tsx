@@ -15,7 +15,7 @@ const sizeClasses = {
     badge: "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-xs font-bold",
   },
   lg: {
-    img: "h-14 w-auto max-w-[260px] object-contain sm:h-[4rem]",
+    img: "h-10 w-auto max-w-[min(10rem,calc(100vw-7.5rem))] object-contain object-left sm:h-14 sm:max-w-[13.75rem] lg:h-[4rem] lg:max-w-[16.25rem]",
     badge: "flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-sm font-bold",
   },
 };

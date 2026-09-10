@@ -197,7 +197,7 @@ export function CardsCarousel({
 
         <div
           ref={clipRef}
-          className={`min-w-0 flex-1 overflow-x-clip overflow-y-visible ${clipClassName}`}
+          className={`min-w-0 flex-1 overflow-hidden ${clipClassName}`}
         >
           <div
             className={`flex items-stretch gap-5 ${animate ? "transition-transform duration-500 ease-out" : ""}`}
