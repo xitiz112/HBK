@@ -6,6 +6,8 @@ import { GoogleTranslate } from "@/components/google-translate";
 import { TranslateLoader } from "@/components/translate-loader";
 import { getSiteSettings } from "@/lib/content";
 import { TRANSLATE_BOOTSTRAP_SCRIPT } from "@/lib/i18n/google-translate";
+import { pageMetadata } from "@/lib/seo";
+import { getSiteUrl } from "@/lib/site-url";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -23,9 +25,24 @@ export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
   const hasIcon = Boolean(settings.favicon || settings.logo);
 
-  return {
+  const defaults = pageMetadata({
     title: settings.siteName,
     description: settings.description,
+    path: "/",
+    siteName: settings.siteName,
+    image: settings.logo,
+    absoluteTitle: true,
+  });
+
+  return {
+    metadataBase: new URL(getSiteUrl()),
+    title: {
+      default: settings.siteName,
+      template: `%s | ${settings.siteName}`,
+    },
+    description: defaults.description,
+    openGraph: defaults.openGraph,
+    twitter: defaults.twitter,
     icons: hasIcon
       ? {
           icon: [{ url: "/icon", type: "image/png" }],

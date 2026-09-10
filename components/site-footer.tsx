@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Building2, Mail, Phone } from "lucide-react";
 
 import { Container, ds, NAV_LINKS } from "@/components/design-system";
+import { JsonLd } from "@/components/json-ld";
 import { SiteBrand } from "@/components/site-brand";
 import { getServices, getSiteSettings } from "@/lib/content";
 import type { ContactInfoData } from "@/lib/content";
@@ -36,8 +37,10 @@ export async function SiteFooter({ contact }: { contact: ContactInfoData }) {
   const [settings, services] = await Promise.all([getSiteSettings(), getServices()]);
 
   return (
-    <footer className="bg-slate-950 py-14 text-[15px] text-slate-300">
-      <Container className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.1fr_0.9fr_1fr_1.45fr] lg:gap-x-12">
+    <>
+      <JsonLd settings={settings} contact={contact} />
+      <footer className="bg-slate-950 py-14 text-[15px] text-slate-300">
+        <Container className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.1fr_0.9fr_1fr_1.45fr] lg:gap-x-12">
         <div>
           <SiteBrand
             siteName={settings.siteName}
@@ -105,7 +108,8 @@ export async function SiteFooter({ contact }: { contact: ContactInfoData }) {
         <p>
           &copy; {new Date().getFullYear()} {settings.siteName}. All rights reserved.
         </p>
-      </Container>
-    </footer>
+        </Container>
+      </footer>
+    </>
   );
 }

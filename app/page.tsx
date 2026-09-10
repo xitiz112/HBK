@@ -1,7 +1,23 @@
+import type { Metadata } from "next";
+
 import { ReferenceHomePage } from "@/components/homepage";
-import { getHomePageData } from "@/lib/content";
+import { getHeroContent, getHomePageData, getSiteSettings } from "@/lib/content";
+import { pageMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const [settings, hero] = await Promise.all([getSiteSettings(), getHeroContent()]);
+
+  return pageMetadata({
+    title: settings.siteName,
+    description: settings.description,
+    path: "/",
+    siteName: settings.siteName,
+    image: hero.image || settings.logo,
+    absoluteTitle: true,
+  });
+}
 
 export default async function Home({
   searchParams,
